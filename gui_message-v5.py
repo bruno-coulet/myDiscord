@@ -9,14 +9,28 @@
 @project: myDiscord
 @licence: GPLv3
 """
+"""                       SCHEMA
+            COLUMN 0            COLUMN 1        COLUMN 2
+
+ROW 0       TITLE,              TITLE,          logout button
+ROW 1       CHANNEL title,      OLD MESSAGE,    OLD MESSAGE
+ROW 2       CHANNEL treeview,   OLD MESSAGE,    OLD MESSAGE
+ROW 3       CHANNEL treeview,   NEW MESSAGE,    NEW MESSAGE
+ROW 4       CHANNEL treeview,   NEW MESSAGE,    NEW MESSAGE
+ROW 5       CHANNEL select,     NEW MESSAGE,    send button
+
+"""
+
 
 import customtkinter as ctk
 from constants import *
+from tkinter import ttk
 
 user_name = "user_name"
 current_channel = "current_channel"
 
 messages =["Message 1", "Message 2", "Message 3", "Message 4", "Message 5", "Message 6","Message 1", "Message 2", "Message 3", "Message 4", "Message 5", "Message 6"]
+channels =["Channel 1", "Channel 2", "Channel 3", "Channel 4", "Channel 5", "Channel 6","Channel 1", "Channel 2", "Channel 3", "Channel 4", "Channel 5", "Channel 6"]
 
 def view_channels():
     print("view channels")
@@ -45,9 +59,6 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
         # self.checkboxes = []
 
         for i, value in enumerate(self.values):
-            # checkbox = ctk.CTkCheckBox(self, text=value)
-            # checkbox.grid(row=i+1, column=0, padx=10, pady=(10, 0))
-            # self.checkboxes.append(checkbox)
             label = ctk.CTkLabel(self, text=value)
             label.grid(row=i+1, column=0, padx=10, pady=(10, 0))
 
@@ -65,41 +76,49 @@ class Message(ctk.CTk):
         super().__init__()
 
         self.title("Messagerie")
-        self.geometry("600x700")
+        self.geometry("1200x700")
         self.grid_columnconfigure((0, 1), weight=1)
 
-        # ----  WINDOW TITLE - ROW 0     -------
+        # ----  TITLE -             ROW 0     -------
         title_label = ctk.CTkLabel(self, text=f"Bienvenue dans la messagerie {user_name}", font=(TITLE_FONT))
         title_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
         title_label.configure(fg_color="darkolivegreen4")
         title_label.pack_propagate(False)
         
-        # ----  LOGOUT  - ROW 0 COL 2   ---
+        # ----  LOGOUT       -      ROW 0 COL 2   ---
         self.button_log_out = ctk.CTkButton(self, text="Se déconnecter", command=log_out)
         self.button_log_out.grid(row=0 , column=2, padx=20, pady=20)
 
 
 
 
-        # ----  CHANNEL FRAME - ROW 1,2,3   COL 0   -------
+        # ----  CHANNEL -           ROW 1,2,3   COL 0   -------
         self.channel_frame = ctk.CTkFrame(self)
         self.channel_frame.grid(row=1, column=0, padx=10, pady=(10, 0), sticky="ns", rowspan=4)
         self.channel_frame.grid_columnconfigure((0, 1), weight=1)
         self.channel_frame.configure(fg_color="darkolivegreen4")
         
-        # ----  CHANNEL FRAME / CURRENT CHANNEL - ROW 1.0  COL 0   ---
+        # ----  CHANNEL / CURRENT - ROW 1.0  COL 0   ---
         self.current_channel_frame = ctk.CTkFrame(self.channel_frame)
         self.current_channel_frame.grid(row=0, column=0, padx=10, pady=(10, 0))
-        # title label  ROW 1.0.0    COL 0
+        # title label               ROW 1.0.0    COL 0
         current_channel_label = ctk.CTkLabel(self.current_channel_frame, text=f"Channel actuel : {current_channel}", font=SUBTITLE_FONT)
         current_channel_label.grid(row=0, column=0, padx=20, pady=20)
-        # title value  ROW 1.0.1    COL 0
-        current_channel_title = ctk.CTkLabel(self.current_channel_frame, text="Les courges ont encore augmentées.", font=FONT)
+        # title value               ROW 1.0.1    COL 0
+        current_channel_title = ctk.CTkLabel(self.current_channel_frame, text="Les courges ont encore augmentées.", font=FONT, wraplength=200)
         current_channel_title.grid(row=1, column=0, padx=20, pady=20)
 
-        # ----  CHANNEL FRAME / EXISTANT CHANNELS - ROW 1.1 and 1.3    COL 0
-        channels = ctk.CTkFrame(self.channel_frame)
-        channels.grid(row=1, column=0, padx=10, pady=(10, 0), rowspan=3)
+        # ----  CHANNEL / OTHER  -  ROW 1.1 and 1.3    COL 0  
+        # Création du Treeview pour afficher les channels
+        self.channel_tree = ttk.Treeview(self.current_channel_frame)
+        # self.channel_tree = ttk.Treeview(self.current_channel_frame, columns=("Channel"))
+        self.channel_tree.heading("#0", text="Autre channels")
+        # self.channel_tree.heading("Channel", text="Channel Name")
+        self.channel_tree.grid(row=1, column=0, padx=10, pady=10, sticky="nsew", rowspan=3)
+        # Ajout des channels au Treeview
+        self.add_channels_to_tree(channel for channel in channels)
+
+
 
         # ----  CHANNEL FRAME - create_channel ROW 1.4  COL 0
         self.button_create_channel = ctk.CTkButton(self.channel_frame, text="Créer un channel", command=create_channel)
@@ -133,7 +152,7 @@ class Message(ctk.CTk):
         self.checkbox_audio_message = ctk.CTkCheckBox(self.message_frame, text="Message audio")
         self.checkbox_audio_message.grid(row=1, column=1, padx=20, pady=(20, 20), sticky="w")
         # --------  input area
-        entry_text = ctk.CTkEntry(self.message_frame, width=400, height=100)
+        entry_text = ctk.CTkEntry(self.message_frame, width=600, height=100,)
         entry_text.grid(row=2, column=0, padx=10, pady=10)
         # -------- send message button
         self.button_send_message = ctk.CTkButton(self.message_frame, text="Publier le message", command=lambda: print("send message", entry_text.get()))
@@ -143,7 +162,9 @@ class Message(ctk.CTk):
     def  checkbox_callback(self):
         print("checkboxes sélectionnées:", self.checkbox_frame_old_message.get())
 
-
+    def add_channels_to_tree(self, channels):
+        for channel in channels:
+            self.channel_tree.insert("", "end", text=channel, values=(channel))
 
 message = Message()
 message.mainloop()
