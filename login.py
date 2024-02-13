@@ -1,3 +1,12 @@
+#!/usr/bin/venv python3
+# -*- coding: utf-8 -*-
+"""
+@authors: Lucas SAVIOZ
+@project: myDiscord
+@file: login.py
+@licence: GPLv3
+"""
+
 import customtkinter as ctk 
 import tkinter.messagebox as tkmb 
 from constants import *
@@ -10,7 +19,7 @@ ctk.set_appearance_mode(BG_COLOR)
 ctk.set_default_color_theme(HIGHLIGHT_COLOR) 
 
 app = ctk.CTk() 
-app.geometry("600x700") 
+app.geometry("1200x700") 
 app.title("myDiscord") 
 
 
@@ -22,7 +31,7 @@ def login():
 
 	new_window.title("Messagerie") 
 
-	new_window.geometry("600x700") 
+	new_window.geometry("1200x700") 
 
 	if user_entry.get() == username and user_pass.get() == password: 
 		tkmb.showinfo(title="Login Successful",message="You have logged in Successfully") 

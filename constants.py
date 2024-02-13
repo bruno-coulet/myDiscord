@@ -1,10 +1,11 @@
 #!/usr/bin/venv python3
 # -*- coding: utf-8 -*-
 """
-@author: Bruno Coulet
+@author: Bruno Coulet; Lucas Savioz
 
 @file: constants.py
-@created: 12/02/2024
+@created : 08/08/24
+@modified : 13/02/24
 
 @project: myDiscord
 @licence: GPLv3
