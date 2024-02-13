@@ -19,6 +19,6 @@ FONT=("helvetica", 15)
 # 
 #  COLORS
 # 
-BG_COLOR = "gray10"
-HIGHLIGHT_COLOR = "MediumPurple4"
-FG_COLOR = "MediumPurple1"
+BG_COLOR = "dark"
+HIGHLIGHT_COLOR = "dark-blue"
+FG_COLOR = "blue2"

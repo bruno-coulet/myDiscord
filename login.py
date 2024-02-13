@@ -1,88 +1,62 @@
-import customtkinter as ctk
-import tkinter as tk
+import customtkinter as ctk 
+import tkinter.messagebox as tkmb 
 from constants import *
 
-class Login(ctk.CTk):
-    def __init__(self):
-        super().__init__()
-        self.title("Login")
-        self.geometry("600x700")
 
-        # Création du cadre de connexion avec la couleur de fond spécifiée et la taille définie
-        window_width = 600  # largeur de la fenêtre principale
-        window_height = 700  # hauteur de la fenêtre principale
-        self.login_frame = ctk.CTkFrame(self, bg_color=BG_COLOR, width=window_width, height=window_height)
-        self.login_frame.pack(fill="both", expand=True)
+# GUI theme - dark
+ctk.set_appearance_mode(BG_COLOR) 
 
-        
-        ####### Paramètres des éléments visuels de la fenêtre Login #######
+# color theme - dark-blue 
+ctk.set_default_color_theme(HIGHLIGHT_COLOR) 
 
-        self.title_label = ctk.CTkLabel(self.login_frame, text="Login", font=TITLE_FONT)
-        self.title_label.grid(row=0, column=0, columnspan=2, pady=10)
-        self.login_frame.grid_columnconfigure(0, weight=1)  # Permet d'étirer la première colonne pour centrer le label
-        self.login_frame.grid_columnconfigure(1, weight=1)  # Permet d'étirer la deuxième colonne pour centrer le label
+app = ctk.CTk() 
+app.geometry("600x700") 
+app.title("myDiscord") 
 
 
-        self.username_label = ctk.CTkLabel(self.login_frame, text="Name:", font=SUBTITLE_FONT)
-        self.username_label.grid(row=1, column=0, padx=10, pady=5, sticky="e")
-        self.username_entry = self.create_entry(self.login_frame, "Name", font=SUBTITLE_FONT)
-        self.username_entry.grid(row=1, column=1, padx=10, pady=5)
+def login(): 
 
-        self.firstname_label = ctk.CTkLabel(self.login_frame, text="Firstname:", font=SUBTITLE_FONT)
-        self.firstname_label.grid(row=2, column=0, padx=10, pady=5, sticky="e")
-        self.firstname_entry = self.create_entry(self.login_frame, "Firstname", font=SUBTITLE_FONT)
-        self.firstname_entry.grid(row=2, column=1, padx=10, pady=5)
+	username = "admin"
+	password = "root"
+	new_window = ctk.CTkToplevel(app) 
 
-        self.password_label = ctk.CTkLabel(self.login_frame, text="Password:", font=SUBTITLE_FONT)
-        self.password_label.grid(row=3, column=0, padx=10, pady=5, sticky="e")
-        self.password_entry = self.create_entry(self.login_frame, "Password", font=SUBTITLE_FONT, show="*")
-        self.password_entry.grid(row=3, column=1, padx=10, pady=5)
+	new_window.title("Messagerie") 
 
-        # Bouton créer un compte
-        self.create_account_button = ctk.CTkButton(self.login_frame, text="Create account", font=SUBTITLE_FONT, bg_color=HIGHLIGHT_COLOR, command=self.create_account)
-        self.create_account_button.grid(row=4, column=0, columnspan=2, padx=10, pady=5)
+	new_window.geometry("600x700") 
 
-        # Bouton se connecter
-        self.login_button = ctk.CTkButton(self.login_frame, text="Login", font=SUBTITLE_FONT, bg_color=HIGHLIGHT_COLOR, command=self.login)
-        self.login_button.grid(row=5, column=0, columnspan=2, padx=10, pady=5)
+	if user_entry.get() == username and user_pass.get() == password: 
+		tkmb.showinfo(title="Login Successful",message="You have logged in Successfully") 
+		ctk.CTkLabel(new_window,text="You are actually connect").pack() 
+	elif user_entry.get() == username and user_pass.get() != password: 
+		tkmb.showwarning(title='Wrong password',message='Please check your password') 
+	elif user_entry.get() != username and user_pass.get() == password: 
+		tkmb.showwarning(title='Wrong username',message='Please check your username') 
+	else: 
+		tkmb.showerror(title="Login Failed",message="Invalid Username and password") 
 
-        # Centrage des colonnes
-        self.login_frame.grid_columnconfigure(0, weight=1)
-        self.login_frame.grid_columnconfigure(1, weight=1)
 
-        # Réactivité de l'interface
-        self.make_responsive()
+label = ctk.CTkLabel(app,text="Welcome !") 
+label.pack(pady=20) 
 
-    def make_responsive(self):
-        # Pour rendre la fenêtre responsive, les lignes doivent s'adapter au redimensionnement de la fenêtre
-        for row in range(6):
-            self.login_frame.grid_rowconfigure(row, weight=1)
+frame = ctk.CTkFrame(master=app) 
+frame.pack(pady=20,padx=40,fill='both',expand=True) 
 
-    def create_entry(self, parent, default_text, **kwargs):
-        # Zones de textes
-        entry = ctk.CTkEntry(parent, width=100, **kwargs)
-        entry.default_text = default_text
-        entry.insert(0, entry.default_text)
-        entry.bind("<FocusIn>", lambda event, entry=entry: self.entry_click_delete(event, entry))
-        entry.bind("<FocusOut>", lambda event, entry=entry: self.entry_leave(event, entry))
-        return entry
+label = ctk.CTkLabel(master=frame,text='Login') 
+label.pack(pady=12,padx=10) 
 
-    def entry_click_delete(self, event, entry):
-        if entry.get() == entry.default_text:
-            entry.delete(0, tk.END)
-            entry.configure(fg='black')
 
-    def entry_leave(self, event, entry):
-        if not entry.get():
-            entry.insert(0, entry.default_text)
-            entry.configure(fg='grey')
+user_entry= ctk.CTkEntry(master=frame,placeholder_text="Username") 
+user_entry.pack(pady=12,padx=10) 
 
-    def create_account(self):
-        print("Create account in process")
+user_pass= ctk.CTkEntry(master=frame,placeholder_text="Password",show="*") 
+user_pass.pack(pady=12,padx=10) 
 
-    def login(self):
-        print("Login in process")
 
-if __name__ == "__main__":
-    app = Login()
-    app.mainloop()
+button = ctk.CTkButton(master=frame,text='Login',command=login) 
+button.pack(pady=12,padx=10) 
+
+checkbox = ctk.CTkCheckBox(master=frame,text='Remember Me') 
+checkbox.pack(pady=12,padx=10) 
+
+
+app.mainloop()
