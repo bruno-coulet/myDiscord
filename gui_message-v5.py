@@ -30,7 +30,15 @@ user_name = "user_name"
 current_channel = "current_channel"
 
 messages =["Message 1", "Message 2", "Message 3", "Message 4", "Message 5", "Message 6","Message 1", "Message 2", "Message 3", "Message 4", "Message 5", "Message 6"]
-channels =["Channel 1", "Channel 2", "Channel 3", "Channel 4", "Channel 5", "Channel 6","Channel 1", "Channel 2", "Channel 3", "Channel 4", "Channel 5", "Channel 6"]
+channels ={
+    "Channel 1":["Raoul","Edouard"],
+    "Channel 2":["Raoul","Edouard","Jeam-mi"],
+    "Channel 3":["Raoul","Edouard"],
+    "Channel 4":["Raoul","Edouard"],
+    "Channel 5":["Raoul","Edouard"],
+    "Channel 6":["Raoul","Edouard"],
+    "Channel 7":["Raoul","Edouard"]
+}
 
 def view_channels():
     print("view channels")
@@ -78,11 +86,12 @@ class Message(ctk.CTk):
         self.title("Messagerie")
         self.geometry("1200x700")
         self.grid_columnconfigure((0, 1), weight=1)
+        self.configure(fg_color="darkolivegreen3")
 
         # ----  TITLE -             ROW 0     -------
         title_label = ctk.CTkLabel(self, text=f"Bienvenue dans la messagerie {user_name}", font=(TITLE_FONT))
         title_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
-        title_label.configure(fg_color="darkolivegreen4")
+        title_label.configure(fg_color="darkgreen")
         title_label.pack_propagate(False)
         
         # ----  LOGOUT       -      ROW 0 COL 2   ---
@@ -101,6 +110,7 @@ class Message(ctk.CTk):
         # ----  CHANNEL / CURRENT - ROW 1.0  COL 0   ---
         self.current_channel_frame = ctk.CTkFrame(self.channel_frame)
         self.current_channel_frame.grid(row=0, column=0, padx=10, pady=(10, 0))
+        self.current_channel_frame.configure(fg_color="darkgreen")
         # title label               ROW 1.0.0    COL 0
         current_channel_label = ctk.CTkLabel(self.current_channel_frame, text=f"Channel actuel : {current_channel}", font=SUBTITLE_FONT)
         current_channel_label.grid(row=0, column=0, padx=20, pady=20)
@@ -113,10 +123,11 @@ class Message(ctk.CTk):
         self.channel_tree = ttk.Treeview(self.current_channel_frame)
         # self.channel_tree = ttk.Treeview(self.current_channel_frame, columns=("Channel"))
         self.channel_tree.heading("#0", text="Autre channels")
-        # self.channel_tree.heading("Channel", text="Channel Name")
         self.channel_tree.grid(row=1, column=0, padx=10, pady=10, sticky="nsew", rowspan=3)
         # Ajout des channels au Treeview
-        self.add_channels_to_tree(channel for channel in channels)
+        self.add_channels_to_tree(channels)
+
+
 
 
 
@@ -144,7 +155,7 @@ class Message(ctk.CTk):
         # -------- label  -     ROW 3.0    COL 0 and 1    ---
         new_message_label = ctk.CTkLabel(self.message_frame, text="Nouveau Message.", font=SUBTITLE_FONT)
         new_message_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
-        new_message_label.configure(fg_color="grey20")
+        new_message_label.configure(fg_color="darkgreen")
         # -------- is text  -   ROW 3.1    COL 0    ---
         self.checkbox_text_message = ctk.CTkCheckBox(self.message_frame, text="Message texte")
         self.checkbox_text_message.grid(row=1, column=0, padx=20, pady=(20, 20), sticky="w")
@@ -163,8 +174,12 @@ class Message(ctk.CTk):
         print("checkboxes sélectionnées:", self.checkbox_frame_old_message.get())
 
     def add_channels_to_tree(self, channels):
-        for channel in channels:
-            self.channel_tree.insert("", "end", text=channel, values=(channel))
+        for channel, users in channels.items():
+            # Insérer le channel dans le Treeview
+            channel_node = self.channel_tree.insert("", "end", text=channel, values=(channel))
+            # Ajouter les utilisateurs sous le channel
+            for user in users:
+                self.channel_tree.insert(channel_node, "end", text=user)
 
 message = Message()
 message.mainloop()
