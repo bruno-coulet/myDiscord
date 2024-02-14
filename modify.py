@@ -11,6 +11,9 @@
 @licence: GPLv3
 """
 
+"""Ce fichier est appelé par les boutons des interfaces graphiques.
+Il appelle à son tour, soit le module message.py, soit user.py, soit channel.py
+Ces modules utilise leur méthodes propres (avec du sql) et font appel a db.py"""
 
 from message import Message
 from channel import Channel
