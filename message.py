@@ -7,10 +7,9 @@ class Message:
        self.db = Db()
 
 
-    def create(self, name, channel_id, content):
-       query = f'INSERT INTO {self.table} (name, channel, content) VALUES (%s, %s, %s)'
-       params = (name, channel_id, content)
-       self.db.executeQuery(query, params)
+    def create(self, author_name, channel_id, content):
+       query = f'INSERT INTO {self.table}(author_name, channel, content) VALUES ({author_name}, {channel_id}, {content})'
+       self.db.query(query)
 
 
 

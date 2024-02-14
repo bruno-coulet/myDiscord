@@ -29,13 +29,13 @@ class Modify:
         self.user = User()
         self.db = Db()
 
-    def createMessage(self, name, channel_id, content):
+    def createMessage(self, author_name, channel_id, content):
         try:
-            id_channel = int(id_channel)
+            channel_id = int(channel_id)
         except ValueError:
             print("ID de categorie invalide. Veuillez entrer un nombre.")
 
-        self.message.create(self, name, channel_id, content)
+        self.message.create(author_name, channel_id, content)
 
 
     def updateMessage(self, id, id_channel):

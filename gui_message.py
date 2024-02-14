@@ -31,7 +31,7 @@ from modify import Modify
 # from message import Message
 
 modify = Modify()
-user_name = "user_name"
+author_name = "author_name"
 current_channel = "current_channel"
 
 messages =["Message 1", "Message 2", "Message 3", "Message 4", "Message 5", "Message 6","Message 1", "Message 2", "Message 3", "Message 4", "Message 5", "Message 6"]
@@ -53,10 +53,10 @@ def view_channels():
 def create_channel():
     print ("create channel")
 
-# importer l'id_channel dynamiquement en 2ème paramètre
-def send_message():
-    modify.createMessage("Texte du message", 1)
-    print("send message")
+# CETTE FONCTION EST MAINTENANT DANS LA CLASSE MESSAGE LIGNE 178 AVEC LE BOUTON DU MêME NOM
+# def send_message():
+#     modify.createMessage(entry_text.get(), 1)
+#     print("send message", entry_text.get())
 
 def log_out():
     print("log out")
@@ -98,7 +98,7 @@ class Message(ctk.CTk):
         self.configure(fg_color="Pale Turquoise3")
 
         # ----  TITLE -             ROW 0     -------
-        title_label = ctk.CTkLabel(self, text=f"Bienvenue dans la messagerie {user_name}", font=(TITLE_FONT))
+        title_label = ctk.CTkLabel(self, text=f"Bienvenue dans la messagerie {author_name}", font=(TITLE_FONT))
         title_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
         title_label.configure(fg_color="grey25")
         title_label.pack_propagate(False)
@@ -175,7 +175,11 @@ class Message(ctk.CTk):
         entry_text.grid(row=2, column=0, padx=10, pady=10)
         entry_text.configure(fg_color="Pale Turquoise4")
         # -------- send message button
-        self.button_send_message = ctk.CTkButton(self.message_frame, text="Publier le message", command=lambda: print("send message", entry_text.get()))
+        def send_message():
+            modify.createMessage(author_name="author_name", channel_id=1, content=entry_text.get())
+            print("send message", entry_text.get())
+
+        self.button_send_message = ctk.CTkButton(self.message_frame, text="Publier le message", command=lambda: send_message())
         self.button_send_message.grid(row=3, column=0, padx=20, pady=20)
 
 
