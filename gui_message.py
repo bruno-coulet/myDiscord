@@ -25,7 +25,12 @@ ROW 5       CHANNEL select,     NEW MESSAGE,    send button
 import customtkinter as ctk
 from constants import *
 from tkinter import ttk
+from modify import Modify
+# from channel import Channel
+# from user import User
+# from message import Message
 
+modify = Modify()
 user_name = "user_name"
 current_channel = "current_channel"
 
@@ -40,13 +45,17 @@ channels ={
     "Channel 7":["Raoul","Edouard"]
 }
 
+
+
 def view_channels():
     print("view channels")
 
 def create_channel():
     print ("create channel")
 
+# importer l'id_channel dynamiquement en 2ème paramètre
 def send_message():
+    modify.createMessage("Texte du message", 1)
     print("send message")
 
 def log_out():
