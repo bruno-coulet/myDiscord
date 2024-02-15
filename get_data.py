@@ -10,7 +10,7 @@
 @project: myDiscord 
 @licence: GPLv3
 """
-
+"""le fichier get_data crée les variables 'messages et 'channels', elles sont appelées par gui_message pour y être affiché"""
 import mariadb
 from db import Db
 
