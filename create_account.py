@@ -11,11 +11,14 @@ import customtkinter as ctk
 import tkinter.messagebox as tkmb 
 import os
 
+
+######## Partie Fonctions ########
+
 # Fonction pour revenir à la page de connexion
 def back_to_login():
-    # Fermer la fenêtre actuelle
+    # Ferme la fenêtre actuelle
     app.destroy()
-    # Exécuter login.py
+    # Exécute login.py
     os.system("python login.py")
 
 # Fonction de création de compte
@@ -30,7 +33,9 @@ def create_account():
     password = user_pass.get()
     create_account_logic(username, password)
 
-# Votre code GUI existant
+
+######## Partie GUI ########
+
 app = ctk.CTk()
 app.geometry("1200x700")
 app.title("Create Account")

@@ -11,6 +11,9 @@ import customtkinter as ctk
 import tkinter.messagebox as tkmb 
 import os
 
+
+######## Partie Fonctions ########
+
 # Fonction pour changer de page vers create_account.py
 def open_create_account():
     # Fermer la fenêtre actuelle
@@ -37,7 +40,9 @@ def login():
     password = user_password.get()
     user_login(username, password)
 
-# Votre code GUI existant
+
+######## Partie GUI ########
+    
 app = ctk.CTk()
 app.geometry("1200x700")
 app.title("myDiscord")
