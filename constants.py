@@ -20,6 +20,6 @@ FONT=("helvetica", 15)
 # 
 #  COLORS
 # 
-BG_COLOR = "dark"
-HIGHLIGHT_COLOR = "dark-blue"
-FG_COLOR = "blue2"
+BG_COLOR = "#1a1a1a"  # Arrière-plan sombre
+HIGHLIGHT_COLOR = "#008080"  # Surbrillance
+FG_COLOR = "#ffffff"  # Couleur du texte

@@ -1,7 +1,7 @@
 #!/usr/bin/venv python3
 # -*- coding: utf-8 -*-
 """
-@authors: Lucas SAVIOZ
+@author: Lucas SAVIOZ
 @project: myDiscord
 @file: login.py
 @licence: GPLv3
@@ -9,63 +9,62 @@
 
 import customtkinter as ctk 
 import tkinter.messagebox as tkmb 
-from constants import *
+import os
 
+# Fonction pour changer de page vers create_account.py
+def open_create_account():
+    # Fermer la fenêtre actuelle
+    app.destroy()
+    # Exécute le fichier create_account.py
+    os.system("python create_account.py")
 
-# GUI theme - dark
-ctk.set_appearance_mode(BG_COLOR) 
+# Fonction de vérification de connexion
+def user_login(username, password):
 
-# color theme - dark-blue 
-ctk.set_default_color_theme(HIGHLIGHT_COLOR) 
+    valid_username = "admin"
+    valid_password = "root"
 
-app = ctk.CTk() 
-app.geometry("1200x700") 
-app.title("myDiscord") 
+    if username == valid_username and password == valid_password:
+        tkmb.showinfo(title="Login Successful", message="You have logged in successfully")
+    elif username == valid_username:
+        tkmb.showwarning(title='Wrong Password', message='Please check your password')
+    else:
+        tkmb.showerror(title="Login Failed", message="Invalid Username and Password")
 
+# Fonction de connexion
+def login():
+    username = user_entry.get()
+    password = user_password.get()
+    user_login(username, password)
 
-def login(): 
+# Votre code GUI existant
+app = ctk.CTk()
+app.geometry("1200x700")
+app.title("myDiscord")
 
-	username = "admin"
-	password = "root"
-	new_window = ctk.CTkToplevel(app) 
+label = ctk.CTkLabel(app, text="Welcome !")
+label.pack(pady=20)
 
-	new_window.title("Messagerie") 
+frame = ctk.CTkFrame(master=app)
+frame.pack(pady=20, padx=40, fill='both', expand=True)
 
-	new_window.geometry("1200x700") 
+label = ctk.CTkLabel(master=frame, text='Login')
+label.pack(pady=12, padx=10)
 
-	if user_entry.get() == username and user_pass.get() == password: 
-		tkmb.showinfo(title="Login Successful",message="You have logged in Successfully") 
-		ctk.CTkLabel(new_window,text="You are actually connect").pack() 
-	elif user_entry.get() == username and user_pass.get() != password: 
-		tkmb.showwarning(title='Wrong password',message='Please check your password') 
-	elif user_entry.get() != username and user_pass.get() == password: 
-		tkmb.showwarning(title='Wrong username',message='Please check your username') 
-	else: 
-		tkmb.showerror(title="Login Failed",message="Invalid Username and password") 
+user_entry = ctk.CTkEntry(master=frame, placeholder_text="Username")
+user_entry.pack(pady=12, padx=10)
 
+user_password = ctk.CTkEntry(master=frame, placeholder_text="Password", show="*")
+user_password.pack(pady=12, padx=10)
 
-label = ctk.CTkLabel(app,text="Welcome !") 
-label.pack(pady=20) 
+button_login = ctk.CTkButton(master=frame, text='Login', command=login)
+button_login.pack(pady=12, padx=10)
 
-frame = ctk.CTkFrame(master=app) 
-frame.pack(pady=20,padx=40,fill='both',expand=True) 
+# Bouton "Account" pour ouvrir create_account.py
+button_create_account = ctk.CTkButton(master=frame, text='Create Account', command=open_create_account)
+button_create_account.pack(pady=12, padx=10)
 
-label = ctk.CTkLabel(master=frame,text='Login') 
-label.pack(pady=12,padx=10) 
-
-
-user_entry= ctk.CTkEntry(master=frame,placeholder_text="Username") 
-user_entry.pack(pady=12,padx=10) 
-
-user_pass= ctk.CTkEntry(master=frame,placeholder_text="Password",show="*") 
-user_pass.pack(pady=12,padx=10) 
-
-
-button = ctk.CTkButton(master=frame,text='Login',command=login) 
-button.pack(pady=12,padx=10) 
-
-checkbox = ctk.CTkCheckBox(master=frame,text='Remember Me') 
-checkbox.pack(pady=12,padx=10) 
-
+checkbox = ctk.CTkCheckBox(master=frame, text='Remember Me')
+checkbox.pack(pady=12, padx=10)
 
 app.mainloop()
