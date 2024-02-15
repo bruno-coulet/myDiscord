@@ -48,6 +48,22 @@ class Db:
         cursor.close()
         base.close()
 
+    # def query(self, req, values=None, modif=False):
+    #     base, cursor = self.__connect()
+    #     cursor.execute(req, values)  # Execute the query with parameters
+    #     base.commit()
+    #     if modif is False:
+    #         res = cursor.fetchall()
+    #         cursor.close()
+    #         base.close()
+    #         return res
+    #     cursor.close()
+    #     base.close()
+
+
+
+
+
 
 if __name__ == '__main__':
     db = Db()

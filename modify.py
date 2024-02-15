@@ -19,7 +19,16 @@ from message import Message
 from channel import Channel
 from user import User
 from db import Db
-
+# from gui_message import channels
+channels ={
+    "recettes":["Raoul","Edouard"],
+    "potager":["Raoul","Edouard","Jeam-mi"],
+    "ustensiles":["Raoul","Edouard"],
+    "poissons":["Raoul","Edouard"],
+    "viandes":["Raoul","Edouard"],
+    "légumes":["Raoul","Edouard"],
+    "volailles":["Raoul","Edouard"]
+}
 
 
 class Modify:
@@ -29,13 +38,11 @@ class Modify:
         self.user = User()
         self.db = Db()
 
-    def createMessage(self, author_name, channel_id, content):
-        try:
-            channel_id = int(channel_id)
-        except ValueError:
-            print("ID de categorie invalide. Veuillez entrer un nombre.")
-
-        self.message.create(author_name, channel_id, content)
+    def createMessage(self, user_name, channel_name, content):
+        if channel_name not in channels:
+            print("Veuillez choisir un channel existant.")
+            return
+        self.message.create(user_name, channel_name, content)
 
 
     def updateMessage(self, id, id_channel):
@@ -59,13 +66,12 @@ class Modify:
         self.message.delete(id_message)
 
 
-    def createChannel(self, channel_name, id_channel):
-        try:
-            id_channel = int(id_channel)
-        except ValueError:
-            print("ID de categorie invalide. Veuillez entrer un nombre.")
+    def createChannel(self, user_name, channel_name):
+        if channel_name in channels:
+            print("Ce channel existe déjà. Veuillez choisir un autre nom.")
+            return
 
-        self.channel.create(channel_name ,id_channel)
+        self.channel.create(user_name, channel_name)
 
 
     def updateChannel(self, id, id_channel):

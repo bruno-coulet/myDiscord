@@ -2,36 +2,42 @@ from db import Db
 
 
 class Message:
-    def __init__(self):
+   def __init__(self):
        self.table = 'message'
        self.db = Db()
 
 
-    def create(self, author_name, channel_id, content):
-       query = f'INSERT INTO {self.table}(author_name, channel, content) VALUES ({author_name}, {channel_id}, {content})'
-       self.db.query(query)
+   def create(self, user_name, channel_name, content):
+      query = f'INSERT INTO {self.table}(user_name, channel_name, content) VALUES (\'{user_name}\', \'{channel_name}\', \'{content}\')'
+      self.db.query(query, modif=True)
+
+
+   # def create(self, user_name, channel_name, content):
+   #    query = 'INSERT INTO {} (user_name, channel_name, content) VALUES (%s, %s, %s)'.format(self.table)
+   #    values = (user_name, channel_name, content)
+   #    self.db.query(query, values)
 
 
 
-    def read(self):
-       query = f'SELECT * FROM {self.table}'
-       return self.db.fetch(query)
+   def read(self):
+      query = f'SELECT * FROM {self.table}'
+      return self.db.fetch(query)
 
 
-    def update(self, id, name, channel_id, content):
-       query = f'UPDATE {self.table} SET name=%s, channel_id=%s, content=%s WHERE id=%s'
-       params = (name, channel_id, content, id)
-       self.db.executeQuery(query, params)
+   def update(self, id, name, channel_id, content):
+      query = f'UPDATE {self.table} SET name=%s, channel_id=%s, content=%s WHERE id=%s'
+      params = (name, channel_id, content, id)
+      self.db.executeQuery(query, params)
 
 
-    def delete(self, id):
-       query = f'DELETE FROM {self.table} WHERE id=%s'
-       params = (id,)
-       self.db.executeQuery(query, params)
+   def delete(self, id):
+      query = f'DELETE FROM {self.table} WHERE id=%s'
+      params = (id,)
+      self.db.executeQuery(query, params)
 
 
-    def find(self, id):
-       query = f'SELECT * FROM {self.table} WHERE id=%s'
-       params = (id,)
-       return self.db.fetch(query, params)
+   def find(self, id):
+      query = f'SELECT * FROM {self.table} WHERE id=%s'
+      params = (id,)
+      return self.db.fetch(query, params)
 

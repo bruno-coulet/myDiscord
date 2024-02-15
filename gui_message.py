@@ -26,23 +26,21 @@ import customtkinter as ctk
 from constants import *
 from tkinter import ttk
 from modify import Modify
-# from channel import Channel
-# from user import User
-# from message import Message
+
 
 modify = Modify()
-author_name = "author_name"
+user_name = "user_name"
 current_channel = "current_channel"
 
 messages =["Message 1", "Message 2", "Message 3", "Message 4", "Message 5", "Message 6","Message 1", "Message 2", "Message 3", "Message 4", "Message 5", "Message 6"]
 channels ={
-    "Channel 1":["Raoul","Edouard"],
-    "Channel 2":["Raoul","Edouard","Jeam-mi"],
-    "Channel 3":["Raoul","Edouard"],
-    "Channel 4":["Raoul","Edouard"],
-    "Channel 5":["Raoul","Edouard"],
-    "Channel 6":["Raoul","Edouard"],
-    "Channel 7":["Raoul","Edouard"]
+    "recettes":["Raoul","Edouard"],
+    "potager":["Raoul","Edouard","Jeam-mi"],
+    "ustensiles":["Raoul","Edouard"],
+    "poissons":["Raoul","Edouard"],
+    "viandes":["Raoul","Edouard"],
+    "légumes":["Raoul","Edouard"],
+    "volailles":["Raoul","Edouard"]
 }
 
 
@@ -52,11 +50,6 @@ def view_channels():
 
 def create_channel():
     print ("create channel")
-
-# CETTE FONCTION EST MAINTENANT DANS LA CLASSE MESSAGE LIGNE 178 AVEC LE BOUTON DU MêME NOM
-# def send_message():
-#     modify.createMessage(entry_text.get(), 1)
-#     print("send message", entry_text.get())
 
 def log_out():
     print("log out")
@@ -98,7 +91,7 @@ class Message(ctk.CTk):
         self.configure(fg_color="Pale Turquoise3")
 
         # ----  TITLE -             ROW 0     -------
-        title_label = ctk.CTkLabel(self, text=f"Bienvenue dans la messagerie {author_name}", font=(TITLE_FONT))
+        title_label = ctk.CTkLabel(self, text=f"Bienvenue dans la messagerie {user_name}", font=(TITLE_FONT))
         title_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
         title_label.configure(fg_color="grey25")
         title_label.pack_propagate(False)
@@ -140,6 +133,12 @@ class Message(ctk.CTk):
 
 
         # ----  CHANNEL FRAME - create_channel ROW 1.4  COL 0
+        # -------- create channel button---------------------------------------------------------------------------------
+        def create_channel():
+            req = f"SELECT channel.channel_name, message.channel_name FROM `channel`, `message` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
+            modify.createChannel(user_name="user_name", channel_name=entry_text.get())
+            print("Création du channel :", entry_text.get())
+
         self.button_create_channel = ctk.CTkButton(self.channel_frame, text="Créer un channel", command=create_channel)
         self.button_create_channel.grid(row=4, column=0, padx=20, pady=20, sticky="s")
 
@@ -174,9 +173,10 @@ class Message(ctk.CTk):
         entry_text = ctk.CTkEntry(self.message_frame, width=600, height=100,)
         entry_text.grid(row=2, column=0, padx=10, pady=10)
         entry_text.configure(fg_color="Pale Turquoise4")
-        # -------- send message button
+        # -------- send message button---------------------------------------------------------------------------------
         def send_message():
-            modify.createMessage(author_name="author_name", channel_id=1, content=entry_text.get())
+            req = f"SELECT channel.channel_name, message.channel_name FROM `channel`, `message` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
+            modify.createMessage(user_name="user_name", channel_name="recettes", content=entry_text.get())
             print("send message", entry_text.get())
 
         self.button_send_message = ctk.CTkButton(self.message_frame, text="Publier le message", command=lambda: send_message())
@@ -194,20 +194,6 @@ class Message(ctk.CTk):
             for user in users:
                 self.channel_tree.insert(channel_node, "end", text=user)
 
-            # Créer un style personnalisé pour le Treeview avec la couleur de fond souhaitée
-        # style = ttk.Style()
-        # style.configure("Custom.Treeview", background="Pale Turquoise4")  # Remplacez "Pale Turquoise4" par la couleur souhaitée
-        # # Appliquer ce style au Treeview
-        # self.channel_tree.configure(style="Custom.Treeview")
-
-        # # Créer un style personnalisé pour le Treeview avec la couleur de fond souhaitée
-        # style = ttk.Style()
-        # style.configure("Custom.Treeview", background="Pale Turquoise4", fieldbackground="Pale Turquoise4")
-        # # Appliquer ce style au Treeview
-        # self.channel_tree.configure(style="Custom.Treeview")
-
-        #     # Modifier la couleur de fond de l'en-tête
-        # self.channel_tree.heading("#0", background="Pale Turquoise4", foreground="white")
 
 
 message = Message()
