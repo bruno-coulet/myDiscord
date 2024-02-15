@@ -9,7 +9,7 @@
 @project: myDiscord
 @licence: GPLv3
 """
-"""                       SCHEMA
+"""                       SCHEMA EXPLICATIF
             COLUMN 0            COLUMN 1        COLUMN 2
 
 ROW 0       TITLE,              TITLE,          logout button
@@ -26,33 +26,31 @@ import customtkinter as ctk
 from constants import *
 from tkinter import ttk
 from modify import Modify
+from db import Db
 
-
+""" récupère les messages et les channels depuis la BDD"""
 modify = Modify()
 user_name = "user_name"
 current_channel = "current_channel"
+db = Db()
+messages = db.query("SELECT content FROM message")
+channels_list = db.query("SELECT channel_name, user_name FROM channel")
+print(channels_list)
+channels = {}
+for channel_name, user_name in channels_list:
+    if channel_name not in channels:
+        channels[channel_name] = [user_name]
+    else:
+        channels[channel_name].append(user_name)
 
-messages =["Message 1", "Message 2", "Message 3", "Message 4", "Message 5", "Message 6","Message 1", "Message 2", "Message 3", "Message 4", "Message 5", "Message 6"]
-channels ={
-    "recettes":["Raoul","Edouard"],
-    "potager":["Raoul","Edouard","Jeam-mi"],
-    "ustensiles":["Raoul","Edouard"],
-    "poissons":["Raoul","Edouard"],
-    "viandes":["Raoul","Edouard"],
-    "légumes":["Raoul","Edouard"],
-    "volailles":["Raoul","Edouard"]
-}
+print(channels)
+
 
 
 
 def view_channels():
     print("view channels")
 
-def create_channel():
-    print ("create channel")
-
-def log_out():
-    print("log out")
 
 def checkbox_callback(self):
         print("checked checkboxes:")
@@ -97,6 +95,9 @@ class Message(ctk.CTk):
         title_label.pack_propagate(False)
         
         # ----  LOGOUT       -      ROW 0 COL 2   ---
+        def log_out():
+            print("log out")
+
         self.button_log_out = ctk.CTkButton(self, text="Se déconnecter", command=log_out)
         self.button_log_out.grid(row=0 , column=2, padx=20, pady=20)
 
