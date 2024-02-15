@@ -135,7 +135,7 @@ class Message(ctk.CTk):
         # ----  CHANNEL FRAME - create_channel ROW 1.4  COL 0
         # -------- create channel button---------------------------------------------------------------------------------
         def create_channel():
-            req = f"SELECT channel.channel_name, message.channel_name FROM `channel`, `message` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
+            # req = f"SELECT channel.channel_name, FROM `channel` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
             modify.createChannel(user_name="user_name", channel_name=entry_text.get())
             print("Création du channel :", entry_text.get())
 
