@@ -4,7 +4,7 @@
 """
 @author: Bruno Coulet
 
-@file: db.py
+@file: get_data.py
 @created: 15/02/2024
 
 @project: myDiscord 
