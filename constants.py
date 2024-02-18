@@ -20,6 +20,8 @@ FONT=("helvetica", 15)
 # 
 #  COLORS
 # 
-BG_COLOR = "#1a1a1a"  # Arrière-plan sombre
-HIGHLIGHT_COLOR = "#008080"  # Surbrillance
-FG_COLOR = "#ffffff"  # Couleur du texte
+FG_COLOR = "#0D1520"  # Arrière-plan sombre
+BUTTON_COLOR = "#1F2833"  # Couleurs des boutons
+HIGHLIGHT_COLOR = "#3E63DD"  # Surbrillance des boutons
+TEXT_COLOR = "#C2E6FF"  # Couleur du texte
+BORDER_COLOR = "#3E63DD" # couleur des bords
