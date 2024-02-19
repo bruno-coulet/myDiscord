@@ -36,7 +36,7 @@ def open_channels():
     os.system("python channel.py")
 
 # Fonction de vérification de connexion
-def user_login(username, password):
+def user_login(name, password):
     # Connexion à la base de données et vérification des informations d'identification de l'utilisateur
     try:
         connection = mysql.connector.connect(host=db_host,
@@ -46,13 +46,13 @@ def user_login(username, password):
         if connection.is_connected():
             cursor = connection.cursor()
             # Exécute une requête pour vérifier les informations d'identification de l'utilisateur
-            cursor.execute("SELECT * FROM user WHERE username = %s AND password = %s", (username, password))
+            cursor.execute("SELECT * FROM user WHERE name = %s AND password = %s", (name, password))
             row = cursor.fetchone()
             if row:
                 tkmb.showinfo(title="Login Successful", message="You have logged in successfully")
                 open_channels()  # Ouvre le fichier channels.py après une connexion réussie
             else:
-                tkmb.showerror(title="Login Failed", message="Invalid Username and Password")
+                tkmb.showerror(title="Login Failed", message="Invalid name and Password")
     except mysql.connector.Error as e:
         print("Error while connecting to MySQL", e)
     finally:
@@ -63,9 +63,9 @@ def user_login(username, password):
 
 # Fonction de connexion
 def login():
-    username = user_entry.get()
+    name = user_entry.get()
     password = user_password.get()
-    user_login(username, password)
+    user_login(name, password)
 
 
 ######## Partie GUI ########
