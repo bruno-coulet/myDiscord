@@ -14,6 +14,8 @@ import customtkinter as ctk
 import tkinter.messagebox as tkmb 
 import mysql.connector
 
+from gui_message import *
+
 # Charge les variables d'environnement à partir du fichier .env
 load_dotenv()
 
@@ -67,6 +69,32 @@ def login():
     password = user_password.get()
     user_login(name, password)
 
+# Fonction de vérification de connexion
+def user_login(name, password):
+    # Connexion à la base de données et vérification des informations d'identification de l'utilisateur
+    try:
+        connection = mysql.connector.connect(host=db_host,
+                                             database=db_name,
+                                             user=db_user,
+                                             password=db_password)
+        if connection.is_connected():
+            cursor = connection.cursor()
+            # Exécute une requête pour vérifier les informations d'identification de l'utilisateur
+            cursor.execute("SELECT * FROM users WHERE name = %s AND password = %s", (name, password))
+            row = cursor.fetchone()
+            if row:
+                tkmb.showinfo(title="Login Successful", message="You have logged in successfully")
+                view_channels()  # Ouvre la fenêtre des chaînes après un login réussi
+            else:
+                tkmb.showerror(title="Login Failed", message="Invalid name and Password")
+    except mysql.connector.Error as e:
+        print("Error while connecting to MySQL", e)
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+            print("MySQL connection is closed")
+
 
 ######## Partie GUI ########
     
@@ -98,7 +126,7 @@ button_frame.pack(pady=12, padx=10)
 # Création d'un label pour le texte "Login"
 login_label = ctk.CTkLabel(master=button_frame, text='Login', bg_color=FG_SECOND_COLOR, font=FONT, text_color=TEXT_COLOR, cursor="hand2", padx=10)
 login_label.grid(row=1, column=1)
-login_label.bind("<Button-1>", lambda event: login())  # Ouvre la fenêtre de connexion lorsqu'on clique dessus
+login_label.bind("<Button-1>", lambda event: login())  # Exécute la fonction de connexion lorsqu'on clique dessus
 
 # Création d'un label pour le texte "Create Account"
 create_account_label = ctk.CTkLabel(master=button_frame, text='Create Account', bg_color=FG_SECOND_COLOR, font=FONT, text_color=TEXT_COLOR, cursor="hand2", padx=10)
