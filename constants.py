@@ -21,7 +21,10 @@ FONT=("helvetica", 15)
 #  COLORS
 # 
 FG_COLOR = "#0D1520"  # Arrière-plan sombre
-BUTTON_COLOR = "#1F2833"  # Couleurs des boutons
+FG_SECOND_COLOR = "#0D2847" # Arrière plan de la second fenètre
+BUTTON_LABEL_COLOR = "#1F2833"  # Couleurs des boutons
+BUTTON_LABEL_HOVER_COLOR = "#3E63DD" # Surbrillance des boutons label
 HIGHLIGHT_COLOR = "#3E63DD"  # Surbrillance des boutons
 TEXT_COLOR = "#C2E6FF"  # Couleur du texte
+FG_TEXT_FIELD = "transparent" # Couleur de fond du champ de texte
 BORDER_COLOR = "#3E63DD" # couleur des bords
