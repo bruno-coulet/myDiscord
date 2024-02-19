@@ -21,6 +21,7 @@ ROW 5       CHANNEL select,     NEW MESSAGE,    send button
 
 """
 
+"""le fichier get_data crée les variables 'messages et 'channels', elles sont appelées par gui_message pour y être affiché"""
 
 import customtkinter as ctk
 from constants import *
