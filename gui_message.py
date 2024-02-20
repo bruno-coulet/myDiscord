@@ -62,8 +62,8 @@ def checkbox_callback(self):
     
 class ScrollableFrame(ctk.CTkScrollableFrame):
 
-    def __init__(self, master, title, values):
-        super().__init__(master, label_text=title)
+    def __init__(self, master, values):
+        super().__init__(master)
         """To make the MyCheckboxFrame class more dynamically usable, we pass a list of string values to the MyCheckboxFrame, which will be the text values of the checkboxes in the frame. Now the number of checkboxes is also arbitrary."""
         self.grid_columnconfigure(0, weight=1)
         self.values = values
@@ -129,7 +129,6 @@ class Message(ctk.CTk):
         # ----  CHANNEL / OTHER  -  ROW 1.1 and 1.3    COL 0  
         # Création du Treeview pour afficher les channels
         self.channel_tree = ttk.Treeview(self.current_channel_frame)
-        # self.channel_tree = ttk.Treeview(self.current_channel_frame, columns=("Channel"))
         self.channel_tree.heading("#0", text="Autre channels")
         self.channel_tree.grid(row=1, column=0, padx=10, pady=10, sticky="nsew", rowspan=3)
         # Ajout des channels au Treeview
@@ -151,11 +150,16 @@ class Message(ctk.CTk):
 
 
 
-        # ----  EXISTANT MESSAGES -  ROW 1 and 2  COL 1 and 2
-        self.frame_old_message = ScrollableFrame(self, "Messages existants", values=[message for message in messages])
-        self.frame_old_message.grid(row=1, column=1, padx=10, pady=(10, 0), sticky="ew", columnspan=2, rowspan=2)
-        self.frame_old_message.configure(fg_color=FG_SECOND_COLOR, border_width=2, border_color=BORDER_COLOR)
-        self.frame_old_message.pack_propagate(False)
+        # ----  EXISTANT MESSAGES FRAME -  ROW 1 and 2  COL 1 and 2
+
+        # self.old_message_frame = ScrollableFrame(self, "Messages existants", values=[message for message in messages])
+        self.old_message_frame = ScrollableFrame(self, values=[message for message in messages])
+        self.old_message_frame.grid(row=1, column=1, padx=10, pady=(10, 0), sticky="ew", columnspan=2, rowspan=2)
+        self.old_message_frame.configure(fg_color=FG_SECOND_COLOR, border_width=2, border_color=BORDER_COLOR)
+        self.old_message_frame.pack_propagate(False)
+
+        # old_message_label = ctk.CTkLabel(self, text="Messages existants.", font=SUBTITLE_FONT)
+        # old_message_label.grid(row=1, column=1, padx=10, pady=5, sticky="n")
       
 
         # ----  NEW MESSAGE FRAME  - ROW 3    COL 1 and 2    ---
@@ -190,7 +194,7 @@ class Message(ctk.CTk):
 
 
     def  checkbox_callback(self):
-        print("checkboxes sélectionnées:", self.checkbox_frame_old_message.get())
+        print("checkboxes sélectionnées:", self.checkbox_old_message_frame.get())
 
     def add_channels_to_tree(self, channels):
         for channel, users in channels.items():
