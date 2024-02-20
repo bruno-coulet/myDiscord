@@ -35,7 +35,7 @@ user_name = "user_name"
 current_channel = "current_channel"
 db = Db()
 messages = db.query("SELECT content FROM message")
-channels_list = db.query("SELECT channel_name, user_name FROM channel")
+channels_list = db.query("SELECT channel_name, creator_name FROM channel")
 # print(channels_list)
 channels = {}
 for channel_name, user_name in channels_list:

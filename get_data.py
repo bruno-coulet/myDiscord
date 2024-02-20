@@ -13,8 +13,12 @@
 """le fichier get_data crée les variables 'messages et 'channels', elles sont appelées par gui_message pour y être affiché"""
 import mariadb
 from db import Db
+from modify import Modify
+modify = Modify()
+db = Db()
 
-def fetch_messages_from_database(conn):
+
+def fetch_messages_from_db(conn):
     messages = []
     cursor = conn.cursor()
     try:
@@ -27,8 +31,8 @@ def fetch_messages_from_database(conn):
         cursor.close()
     return messages
 
-# Récupérez les canaux et les utilisateurs depuis la base de données
-def fetch_channels_and_users_from_database(conn):
+
+def fetch_channels_and_users_from_db(conn):
     channels = {}
     cursor = conn.cursor()
     try:
@@ -44,17 +48,37 @@ def fetch_channels_and_users_from_database(conn):
         cursor.close()
     return channels
 
-# Exemple d'utilisation
+
+""" récupère les messages et les channels depuis la BDD"""
+
+current_channel = "current_channel"
+
+# user_name = "user_name"
+
+
+messages = db.query("SELECT content FROM message")
+channels_list = db.query("SELECT channel_name, creator_name FROM channel")
+# print(channels_list)
+channels = {}
+for channel_name, user_name in channels_list:
+    if channel_name not in channels:
+        channels[channel_name] = [user_name]
+    else:
+        channels[channel_name].append(user_name)
+
+
+
+
 def main():
 
     db = Db()
     
-    conn=db.connect()
+    conn=db.__connect()
 
 
     if conn:
-        messages = fetch_messages_from_database(conn)
-        channels = fetch_channels_and_users_from_database(conn)
+        messages = fetch_messages_from_db(conn)
+        channels = fetch_channels_and_users_from_db(conn)
         print("Messages récupérés depuis la base de données :", messages)
         print("Canaux et utilisateurs récupérés depuis la base de données :", channels)
         conn.close()

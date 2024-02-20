@@ -28,18 +28,26 @@ from constants import *
 from tkinter import ttk
 from modify import Modify
 from db import Db
+from get_data import *
 import threading
 import time
 
 
-""" récupère les messages et les channels depuis la BDD"""
-modify = Modify()
-user_name = "user_name"
-current_channel = "current_channel"
-db = Db()
-messages = db.query("SELECT content FROM message")
-channels_list = db.query("SELECT channel_name, user_name FROM channel")
-# print(channels_list)
+""" récupère les DATA depuis la BDD"""
+
+# NOM du channel ID = 1
+channel = db.query("SELECT channel_name FROM channel WHERE ID=1")
+channel_name=f"{channel[0][0]}"
+print(channel_name)
+
+# NOM et PRENOM d'un utilisateur ID = 1
+user = db.query("SELECT name, first_name FROM user WHERE ID=1")
+user_first_name_and_name=f"{user[0][1]} {user[0][0]}"
+print(user_first_name_and_name)
+
+
+# 
+channels_list = db.query("SELECT channel_name, creator_name FROM channel")
 channels = {}
 for channel_name, user_name in channels_list:
     if channel_name not in channels:
@@ -48,7 +56,7 @@ for channel_name, user_name in channels_list:
         channels[channel_name].append(user_name)
 
 
-
+# messages = db.query("SELECT content FROM message")
 
 
 def view_channels():
@@ -94,7 +102,7 @@ class Message(ctk.CTk):
         self.configure(fg_color=FG_COLOR)
 
         # ----  TITLE -             ROW 0     -------
-        title_label = ctk.CTkLabel(self, text=f"Bienvenue dans la messagerie {user_name}", font=(TITLE_FONT))
+        title_label = ctk.CTkLabel(self, text=f"Bienvenue dans la messagerie {user_first_name_and_name}", font=(TITLE_FONT))
         title_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
         # title_label.configure(fg_color="grey25")
         title_label.pack_propagate(False)
@@ -120,10 +128,9 @@ class Message(ctk.CTk):
         self.current_channel_frame.grid(row=0, column=0, padx=10, pady=(10, 0))
         self.current_channel_frame.configure(fg_color=FG_SECOND_COLOR)
         # title label               ROW 1.0.0    COL 0
-        current_channel_label = ctk.CTkLabel(self.current_channel_frame, text=f"Channel actuel : {current_channel}", font=SUBTITLE_FONT)
+        current_channel_label = ctk.CTkLabel(self.current_channel_frame, text=f"Channel actuel : {channel_name}", font=SUBTITLE_FONT)
         current_channel_label.grid(row=0, column=0, padx=20, pady=20)
         # title value               ROW 1.0.1    COL 0
-        # current_channel_title = ctk.CTkLabel(self.current_channel_frame, text="Les courges ont encore augmentées.", font=FONT, wraplength=200)
         current_channel_title = ctk.CTkLabel(self.current_channel_frame, font=FONT, wraplength=200)
         current_channel_title.grid(row=1, column=0, padx=20, pady=20)
 
@@ -142,7 +149,7 @@ class Message(ctk.CTk):
         # -------- create channel button---------------------------------------------------------------------------------
         def create_channel():
             # req = f"SELECT channel.channel_name, FROM `channel` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
-            modify.createChannel(user_name="user_name", channel_name=entry_text.get())
+            modify.createChannel(user_name=user_name, channel_name=entry_text.get())
             print("Création du channel :", entry_text.get())
 
         self.button_create_channel = ctk.CTkButton(self.channel_frame, text="Créer un channel", command=create_channel)
