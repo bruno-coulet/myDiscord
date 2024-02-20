@@ -20,11 +20,11 @@ load_dotenv()
 
 class Db:
     def __init__(self):
-        self.__url = os.getenv('url')
-        self.__user = os.getenv('user')
-        self.__pw = os.getenv('pw')
-        self.__port = int(os.getenv('port'))
-        self.__database = os.getenv('db')
+        self.__url = os.getenv('DB_HOST')
+        self.__user = os.getenv('DB_USER')
+        self.__pw = os.getenv('DB_PASSWORD')
+        self.__port = int(os.getenv('DB_PORT'))
+        self.__database = os.getenv('DB_NAME')
 
     def __connect(self):
         base = mariadb.connect(
