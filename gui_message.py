@@ -39,7 +39,7 @@ current_channel = "current_channel"
 db = Db()
 messages = db.query("SELECT content FROM message")
 channels_list = db.query("SELECT channel_name, user_name FROM channel")
-print(channels_list)
+# print(channels_list)
 channels = {}
 for channel_name, user_name in channels_list:
     if channel_name not in channels:
@@ -52,7 +52,7 @@ for channel_name, user_name in channels_list:
 
 
 def view_channels():
-    print("view channels")
+    print("channels_list")
 
 
 def checkbox_callback(self):
@@ -123,7 +123,8 @@ class Message(ctk.CTk):
         current_channel_label = ctk.CTkLabel(self.current_channel_frame, text=f"Channel actuel : {current_channel}", font=SUBTITLE_FONT)
         current_channel_label.grid(row=0, column=0, padx=20, pady=20)
         # title value               ROW 1.0.1    COL 0
-        current_channel_title = ctk.CTkLabel(self.current_channel_frame, text="Les courges ont encore augmentées.", font=FONT, wraplength=200)
+        # current_channel_title = ctk.CTkLabel(self.current_channel_frame, text="Les courges ont encore augmentées.", font=FONT, wraplength=200)
+        current_channel_title = ctk.CTkLabel(self.current_channel_frame, font=FONT, wraplength=200)
         current_channel_title.grid(row=1, column=0, padx=20, pady=20)
 
         # ----  CHANNEL / OTHER  -  ROW 1.1 and 1.3    COL 0  
@@ -158,6 +159,7 @@ class Message(ctk.CTk):
         self.old_message_frame.configure(fg_color=FG_SECOND_COLOR, border_width=2, border_color=BORDER_COLOR)
         self.old_message_frame.pack_propagate(False)
 
+        #  TITRE DE FRAME TROP DUR A METTRE EN PAGE PROPREMENT
         # old_message_label = ctk.CTkLabel(self, text="Messages existants.", font=SUBTITLE_FONT)
         # old_message_label.grid(row=1, column=1, padx=10, pady=5, sticky="n")
       
@@ -187,7 +189,7 @@ class Message(ctk.CTk):
         def send_message():
             req = f"SELECT channel.channel_name, message.channel_name FROM `channel`, `message` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
             modify.createMessage(user_name=user_name, channel_name=current_channel, content=entry_text.get())
-            print("send message", entry_text.get())
+            print("send message : ", entry_text.get())
 
         self.button_send_message = ctk.CTkButton(self.message_frame, text="Publier le message", command=lambda: send_message())
         self.button_send_message.grid(row=3, column=0, padx=20, pady=20)
