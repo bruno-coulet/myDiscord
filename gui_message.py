@@ -35,7 +35,7 @@ import time
 
 """ récupère les DATA depuis la BDD"""
 
-# NOM du channel ID = 1
+# NOM du channel ID = 1 EN ATTENDANT DE POUVOIR RECUPERER L'UTILISATEUR CONNECTE
 channel = db.query("SELECT channel_name FROM channel WHERE ID=1")
 channel_name=f"{channel[0][0]}"
 print(channel_name)
@@ -46,14 +46,21 @@ user_first_name_and_name=f"{user[0][1]} {user[0][0]}"
 print(user_first_name_and_name)
 
 
-# 
-channels_list = db.query("SELECT channel_name, creator_name FROM channel")
+# NOMS des channels et de leur users
+channels_query = "SELECT c.id, c.channel_name, u.first_name FROM channel c JOIN channel_user cu ON c.id = cu.channel_id JOIN user u ON cu.user_id = u.id"
+channels_data = db.query(channels_query)
+
 channels = {}
-for channel_name, user_name in channels_list:
+
+for channel_id, channel_name, user_name in channels_data:
     if channel_name not in channels:
         channels[channel_name] = [user_name]
     else:
         channels[channel_name].append(user_name)
+
+
+
+
 
 
 # messages = db.query("SELECT content FROM message")
