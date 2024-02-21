@@ -29,8 +29,7 @@ from tkinter import ttk
 from modify import Modify
 from db import Db
 from get_data import *
-import threading
-import time
+# from update import Update
 
 
 """ récupère les DATA depuis la BDD"""
@@ -61,26 +60,16 @@ for channel_id, channel_name, user_name in channels_data:
 
 
 
-
-
-
-# messages = db.query("SELECT content FROM message")
-
-
-def view_channels():
-    print("channels_list")
-
-
+# SERVIRA PEUT ETRE UN JOUR CHOISIR LE MODE AUDIO
 def checkbox_callback(self):
         print("checked checkboxes:")
 
 
-    
+""" affiche les messages existants"""   
 class ScrollableFrame(ctk.CTkScrollableFrame):
 
     def __init__(self, master, values):
         super().__init__(master)
-        """To make the MyCheckboxFrame class more dynamically usable, we pass a list of string values to the MyCheckboxFrame, which will be the text values of the checkboxes in the frame. Now the number of checkboxes is also arbitrary."""
         self.grid_columnconfigure(0, weight=1)
         self.values = values
         self.configure(fg_color=FG_SECOND_COLOR)
@@ -92,12 +81,12 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
             label.grid(row=i+1, column=0, padx=10, pady=(10, 0))
 
 
-    def get(self):
-        checked_checkboxes = []
-        for checkbox in self.checkboxes:
-            if checkbox.get() == 1:
-                checked_checkboxes.append(checkbox.cget("text"))
-        return checked_checkboxes
+    # def get(self):
+    #     checked_checkboxes = []
+    #     for checkbox in self.checkboxes:
+    #         if checkbox.get() == 1:
+    #             checked_checkboxes.append(checkbox.cget("text"))
+    #     return checked_checkboxes
 
 
 class Message(ctk.CTk):
@@ -153,20 +142,12 @@ class Message(ctk.CTk):
 
 
         # ----  CHANNEL / CREATE    ROW 1.5  COL 0
-
-        # def create_channel():
-        #     modify.createChannel(creator_id=user_id, channel_name=entry_text.get())
-        #     print("Création du channel :", entry_text.get())
-        #     print(f'user_id = {user_id}')
-        #     print(channel_name)
         def create_channel():
             new_channel_name = channel_entry_text.get()  # Récupérer le texte entré dans entry_text
             modify.createChannel(creator_id=user_id, channel_name=new_channel_name)
             print("Création du channel :", new_channel_name)
             print(f'user_id = {user_id}')
-
-
-
+ 
         new_channel_label = ctk.CTkLabel(self.channel_frame, text="Créez un channel :", font=SUBTITLE_FONT)
         new_channel_label.grid(row=3, column=0, padx=10, pady=10)
         # --------  input area
@@ -180,7 +161,7 @@ class Message(ctk.CTk):
 
 
 
-        # ----  EXISTANT MESSAGES FRAME -  ROW 1 and 2  COL 1 and 2
+        # ----  OLD MESSAGES FRAME -  ROW 1 and 2  COL 1 and 2
 
         # self.old_message_frame = ScrollableFrame(self, "Messages existants", values=[message for message in messages])
         self.old_message_frame = ScrollableFrame(self, values=[message for message in messages])
@@ -217,15 +198,15 @@ class Message(ctk.CTk):
         # -------- send message button---------------------------------------------------------------------------------
         def send_message():
             req = f"SELECT channel.channel_name, message.channel_name FROM `channel`, `message` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
-            modify.createMessage(user_name=user_name, channel_name=current_channel, content=entry_text.get())
+            modify.createMessage(user_name=user_first_name, channel_name=channel_name, content=entry_text.get())
             print("send message : ", entry_text.get())
 
         self.button_send_message = ctk.CTkButton(self.message_frame, text="Publier le message", command=lambda: send_message())
         self.button_send_message.grid(row=3, column=0, padx=20, pady=20)
 
 
-    def  checkbox_callback(self):
-        print("checkboxes sélectionnées:", self.checkbox_old_message_frame.get())
+    # def  checkbox_callback(self):
+    #     print("checkboxes sélectionnées:", self.checkbox_old_message_frame.get())
 
     def add_channels_to_tree(self, channels):
         for channel, users in channels.items():
