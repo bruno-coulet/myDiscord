@@ -19,16 +19,7 @@ from message import Message
 from channel import Channel
 from user import User
 from db import Db
-# from gui_message import channels
-# channels ={
-#     "recettes":["Raoul","Edouard"],
-#     "potager":["Raoul","Edouard","Jeam-mi"],
-#     "ustensiles":["Raoul","Edouard"],
-#     "poissons":["Raoul","Edouard"],
-#     "viandes":["Raoul","Edouard"],
-#     "légumes":["Raoul","Edouard"],
-#     "volailles":["Raoul","Edouard"]
-# }
+
 
 """ récupère les messages et les channels depuis la BDD"""
 user_name = "user_name"
@@ -79,12 +70,12 @@ class Modify:
         self.message.delete(id_message)
 
 
-    def createChannel(self, user_name, channel_name):
+    def createChannel(self, creator_id, channel_name):
         if channel_name in channels:
             print("Ce channel existe déjà. Veuillez choisir un autre nom.")
             return
 
-        self.channel.create(user_name, channel_name)
+        self.channel.create(creator_id, channel_name)
 
 
     def updateChannel(self, id, id_channel):
