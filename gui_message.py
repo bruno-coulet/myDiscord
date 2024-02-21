@@ -48,15 +48,17 @@ print(user_first_name_and_name)
 print(user_id)
 
 
-# NOMS des channels et de leur users
-channels_req = "SELECT c.id, c.channel_name, u.first_name FROM channel c JOIN channel_user cu ON c.id = cu.channel_id JOIN user u ON cu.user_id = u.id"
-channels_data = db.query(channels_req)
-channels = {}
+# DATA POUR LE TREEVIEW
+channels_data = db.query("SELECT c.id, c.channel_name, u.first_name FROM channel c JOIN channel_user cu ON c.id = cu.channel_id JOIN user u ON cu.user_id = u.id")
+channels_user  = {}
 for channel_id, channel_name, user_name in channels_data:  
-    if channel_name not in channels:
-        channels[channel_name] = [user_name]
+    if channel_name not in channels_user :
+        #  initialise une liste d'utilisateur associé au channel
+        #  attribue cette liste à la clé channel_name.
+        channels_user [channel_name] = [user_name]
     else:
-        channels[channel_name].append(user_name)
+        # ajoute l'utilisateur actuel à la liste existante d'utilisateurs
+        channels_user [channel_name].append(user_name)
 
 
 
@@ -79,7 +81,6 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
         for i, value in enumerate(self.values):
             label = ctk.CTkLabel(self, text=value)
             label.grid(row=i+1, column=0, padx=10, pady=(10, 0))
-
 
     # def get(self):
     #     checked_checkboxes = []
@@ -131,13 +132,13 @@ class Message(ctk.CTk):
         current_channel_title = ctk.CTkLabel(self.current_channel_frame, font=FONT, wraplength=200)
         current_channel_title.grid(row=1, column=0, padx=20, pady=20)
 
-        # ----  CHANNEL / OTHER  -  ROW 1.1 and 1.3    COL 0  
+        # ----  CHANNEL / TREEVIEW  -  ROW 1.1 and 1.3    COL 0  
         # Création du Treeview pour afficher les channels
         self.channel_tree = ttk.Treeview(self.current_channel_frame)
         self.channel_tree.heading("#0", text="Autre channels")
         self.channel_tree.grid(row=1, column=0, padx=10, pady=10, sticky="nsew", rowspan=3)
         # Ajout des channels au Treeview
-        self.add_channels_to_tree(channels)
+        self.add_channels_to_tree(channels_user )
 
 
 
@@ -195,6 +196,7 @@ class Message(ctk.CTk):
         entry_text = ctk.CTkEntry(self.message_frame, width=600, height=50,)
         entry_text.grid(row=2, column=0, padx=10, pady=10)
         entry_text.configure(fg_color=FG_COLOR, border_width=2, border_color=BORDER_COLOR)
+
         # -------- send message button---------------------------------------------------------------------------------
         def send_message():
             req = f"SELECT channel.channel_name, message.channel_name FROM `channel`, `message` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
@@ -208,15 +210,15 @@ class Message(ctk.CTk):
     # def  checkbox_callback(self):
     #     print("checkboxes sélectionnées:", self.checkbox_old_message_frame.get())
 
-    def add_channels_to_tree(self, channels):
-        for channel, users in channels.items():
+    def add_channels_to_tree(self, channels_user ):
+        for channel, users in channels_user .items():
             # Insérer le channel dans le Treeview
             channel_node = self.channel_tree.insert("", "end", text=channel, values=(channel))
             # Ajouter les utilisateurs sous le channel
             for user in users:
                 self.channel_tree.insert(channel_node, "end", text=user)
 
-
+  
 
 message = Message()
 message.mainloop()
