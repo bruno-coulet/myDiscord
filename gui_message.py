@@ -40,19 +40,20 @@ channel = db.query("SELECT channel_name FROM channel WHERE ID=1")
 channel_name=f"{channel[0][0]}"
 print(channel_name)
 
-# NOM et PRENOM d'un utilisateur ID = 1
-user = db.query("SELECT name, first_name FROM user WHERE ID=1")
+# NOM, PRENOM et ID de l'utilisateur (pour le moment, celui avec l'ID = 1)
+user = db.query("SELECT name, first_name, ID FROM user WHERE ID=1")
 user_first_name_and_name=f"{user[0][1]} {user[0][0]}"
+user_first_name=f'{user[0][1]}'
+user_id=f'{user[0][2]}'
 print(user_first_name_and_name)
+print(user_id)
 
 
 # NOMS des channels et de leur users
-channels_query = "SELECT c.id, c.channel_name, u.first_name FROM channel c JOIN channel_user cu ON c.id = cu.channel_id JOIN user u ON cu.user_id = u.id"
-channels_data = db.query(channels_query)
-
+channels_req = "SELECT c.id, c.channel_name, u.first_name FROM channel c JOIN channel_user cu ON c.id = cu.channel_id JOIN user u ON cu.user_id = u.id"
+channels_data = db.query(channels_req)
 channels = {}
-
-for channel_id, channel_name, user_name in channels_data:
+for channel_id, channel_name, user_name in channels_data:  
     if channel_name not in channels:
         channels[channel_name] = [user_name]
     else:
@@ -151,16 +152,30 @@ class Message(ctk.CTk):
 
 
 
+        # ----  CHANNEL / CREATE    ROW 1.5  COL 0
 
-        # ----  CHANNEL FRAME - create_channel ROW 1.4  COL 0
-        # -------- create channel button---------------------------------------------------------------------------------
+        # def create_channel():
+        #     modify.createChannel(creator_id=user_id, channel_name=entry_text.get())
+        #     print("Création du channel :", entry_text.get())
+        #     print(f'user_id = {user_id}')
+        #     print(channel_name)
         def create_channel():
-            # req = f"SELECT channel.channel_name, FROM `channel` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
-            modify.createChannel(user_name=user_name, channel_name=entry_text.get())
-            print("Création du channel :", entry_text.get())
+            new_channel_name = channel_entry_text.get()  # Récupérer le texte entré dans entry_text
+            modify.createChannel(creator_id=user_id, channel_name=new_channel_name)
+            print("Création du channel :", new_channel_name)
+            print(f'user_id = {user_id}')
 
-        self.button_create_channel = ctk.CTkButton(self.channel_frame, text="Créer un channel", command=create_channel)
-        self.button_create_channel.grid(row=4, column=0, padx=20, pady=20, sticky="s")
+
+
+        new_channel_label = ctk.CTkLabel(self.channel_frame, text="Créez un channel :", font=SUBTITLE_FONT)
+        new_channel_label.grid(row=3, column=0, padx=10, pady=10)
+        # --------  input area
+        channel_entry_text = ctk.CTkEntry(self.channel_frame)
+        channel_entry_text.grid(row=4, column=0, padx=10, pady=10)
+        channel_entry_text.configure(fg_color=FG_COLOR, border_width=2, border_color=BORDER_COLOR)
+        # -------- create channel button---------------------------------------------------------------------------------
+        self.button_create_channel = ctk.CTkButton(self.channel_frame, text="Valider le channel", command=create_channel)
+        self.button_create_channel.grid(row=5, column=0, padx=20, pady=20, sticky="s")
 
 
 
