@@ -54,7 +54,7 @@ def user_login(name, password):
             row = cursor.fetchone()
             if row:
                 tkmb.showinfo(title="Login Successful", message="You have logged in successfully")
-                open_message()  # Ouvre le fichier channel.py après une connexion réussie
+                # Pas d'ouverture automatique du fichier message.py
             else:
                 tkmb.showerror(title="Login Failed", message="Invalid name and Password")
     except mysql.connector.Error as e:
@@ -96,7 +96,7 @@ button_frame.pack(pady=12, padx=10)
 # Création d'un label pour le texte "Login"
 login_label = ctk.CTkLabel(master=button_frame, text='Login', bg_color=FG_SECOND_COLOR, font=FONT, text_color=TEXT_COLOR, cursor="hand2", padx=10)
 login_label.grid(row=1, column=1)
-login_label.bind("<Button-1>", lambda event: user_login())  # Exécute la fonction de connexion lorsqu'on clique dessus
+login_label.bind("<Button-1>", lambda event: user_login(user_entry.get(), user_password.get()))  # Exécute la fonction de connexion lorsqu'on clique dessus
 
 # Création d'un label pour le texte "Create Account"
 create_account_label = ctk.CTkLabel(master=button_frame, text='Create Account', bg_color=FG_SECOND_COLOR, font=FONT, text_color=TEXT_COLOR, cursor="hand2", padx=10)
