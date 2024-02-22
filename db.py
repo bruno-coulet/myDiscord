@@ -27,6 +27,7 @@ class Db:
         self.__database = os.getenv('DB_NAME')
 
     def __connect(self):
+        # Connexion à la BDD
         base = mariadb.connect(
                 host=self.__url,
                 user=self.__user,
@@ -35,30 +36,21 @@ class Db:
                 database=self.__database,
                 autocommit=False
                 )
+        # Création de l'objet curseur
         cursor = base.cursor()
         return base, cursor
 
     def query(self, req, modif=False):
         base, cursor = self.__connect()
+        # Exécute la requête SQL
         cursor.execute(req)
         base.commit()
         if modif is False:
             res = cursor.fetchall()
             return res
+        # Fermeture de la connexion
         cursor.close()
         base.close()
-
-    # def query(self, req, values=None, modif=False):
-    #     base, cursor = self.__connect()
-    #     cursor.execute(req, values)  # Execute the query with parameters
-    #     base.commit()
-    #     if modif is False:
-    #         res = cursor.fetchall()
-    #         cursor.close()
-    #         base.close()
-    #         return res
-    #     cursor.close()
-    #     base.close()
 
 
 
@@ -68,4 +60,7 @@ class Db:
 if __name__ == '__main__':
     db = Db()
     print(db.query("SHOW TABLES"))
+    print(db.query("SELECT name FROM user"))
+
+
 
