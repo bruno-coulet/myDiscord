@@ -24,7 +24,6 @@ class User:
        params = (name, first_name, email, password, id)
        self.db.executeQuery(query, params)
 
-
    def delete(self, id):
        query = f'DELETE FROM {self.table} WHERE id=%s'
        params = (id,)
