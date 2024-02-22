@@ -219,6 +219,7 @@ class Message(ctk.CTk):
                 self.channel_tree.insert(channel_node, "end", text=user)
 
   
+if __name__ == "__main__":
 
-message = Message()
-message.mainloop()
+    message = Message()
+    message.mainloop()
