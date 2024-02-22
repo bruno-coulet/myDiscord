@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 import customtkinter as ctk 
 import tkinter.messagebox as tkmb 
 import mysql.connector
-
+from create_account import *
 from gui_message import *
 
 # Charge les variables d'environnement à partir du fichier .env
@@ -27,20 +27,16 @@ db_name = os.getenv("DB_NAME")
 
 ######## Partie Fonctions ########
 
-# Fonction pour changer de page vers create_account.py
-def open_create_account():
-    # Fermer la fenêtre actuelle
-    app.destroy()
-    # Exécute le fichier create_account.py
-    os.system("python create_account.py")
-
-# Fonction pour ouvrir le fichier channel.py
-def open_message():
-    # Exécute le fichier channel.py
-    os.system("python message.py")
+# Fonction principale pour lancer la connexion de l'utilisateur
+def start_login_process():
+    # Autres opérations d'initialisation si nécessaire
+    # Appel de la fonction user_login()
+    user_login()
 
 # Fonction de vérification de connexion
-def user_login(name, password):
+def user_login():
+    name = user_entry.get()  # Récupérer le nom d'utilisateur depuis le champ de saisie
+    password = user_password.get()  # Récupérer le mot de passe depuis le champ de saisie
     # Connexion à la base de données et vérification des informations d'identification de l'utilisateur
     try:
         connection = mysql.connector.connect(host=db_host,
@@ -54,17 +50,22 @@ def user_login(name, password):
             row = cursor.fetchone()
             if row:
                 tkmb.showinfo(title="Login Successful", message="You have logged in successfully")
-                # Pas d'ouverture automatique du fichier message.py
+                open_message()  # Ouvre le fichier message.py après une connexion réussie
             else:
                 tkmb.showerror(title="Login Failed", message="Invalid name and Password")
     except mysql.connector.Error as e:
         print("Error while connecting to MySQL", e)
     finally:
-        if connection.is_connected():
+        if 'connection' in locals() and connection.is_connected():
             cursor.close()
             connection.close()
             print("MySQL connection is closed")
 
+# Fonction pour ouvrir le fichier channel.py
+def open_message():
+    os.system("python message.py")  # Exécuter le fichier message.py
+
+# Autres fonctions et déclarations...
 
 ######## Partie GUI ########
 
@@ -96,15 +97,18 @@ button_frame.pack(pady=12, padx=10)
 # Création d'un label pour le texte "Login"
 login_label = ctk.CTkLabel(master=button_frame, text='Login', bg_color=FG_SECOND_COLOR, font=FONT, text_color=TEXT_COLOR, cursor="hand2", padx=10)
 login_label.grid(row=1, column=1)
-login_label.bind("<Button-1>", lambda event: user_login(user_entry.get(), user_password.get()))  # Exécute la fonction de connexion lorsqu'on clique dessus
+login_label.bind("<Button-1>", lambda event: user_login())  # Exécute la fonction de connexion lorsqu'on clique dessus
 
 # Création d'un label pour le texte "Create Account"
 create_account_label = ctk.CTkLabel(master=button_frame, text='Create Account', bg_color=FG_SECOND_COLOR, font=FONT, text_color=TEXT_COLOR, cursor="hand2", padx=10)
 create_account_label.grid(row=1, column=2)
-create_account_label.bind("<Button-1>", lambda event: open_create_account())  # Ouvre la fenêtre de création de compte lorsqu'on clique dessus
+create_account_label.bind("<Button-1>", lambda event: create_account())  # Ouvre la fenêtre de création de compte lorsqu'on clique dessus
 
 
 checkbox = ctk.CTkCheckBox(master=frame, text='Remember Me', font=FONT, text_color=TEXT_COLOR, border_color=BORDER_COLOR)
 checkbox.pack(pady=12, padx=10)
+
+# Appel de la fonction principale pour lancer le processus de connexion au démarrage
+start_login_process()
 
 app.mainloop()
