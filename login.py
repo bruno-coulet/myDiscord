@@ -41,7 +41,7 @@ def open_message():
 
 # Fonction de vérification de connexion
 def user_login(name, password):
-    connection = None  # Initialise la variable connection en dehors du bloc try
+    # Connexion à la base de données et vérification des informations d'identification de l'utilisateur
     try:
         connection = mysql.connector.connect(host=db_host,
                                              database=db_name,
@@ -54,13 +54,13 @@ def user_login(name, password):
             row = cursor.fetchone()
             if row:
                 tkmb.showinfo(title="Login Successful", message="You have logged in successfully")
-                open_message()  # Ouvre le fichier channel.py après une connexion réussie
+                # Pas d'ouverture automatique du fichier message.py
             else:
                 tkmb.showerror(title="Login Failed", message="Invalid name and Password")
     except mysql.connector.Error as e:
         print("Error while connecting to MySQL", e)
     finally:
-        if connection is not None and connection.is_connected():
+        if connection.is_connected():
             cursor.close()
             connection.close()
             print("MySQL connection is closed")
