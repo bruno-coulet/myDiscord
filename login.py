@@ -29,7 +29,6 @@ db_name = os.getenv("DB_NAME")
 
 # Fonction principale pour lancer la connexion de l'utilisateur
 def start_login_process():
-    # Autres opérations d'initialisation si nécessaire
     # Appel de la fonction user_login()
     user_login()
 
@@ -63,9 +62,7 @@ def user_login():
 
 # Fonction pour ouvrir le fichier channel.py
 def open_message():
-    os.system("python message.py")  # Exécuter le fichier message.py
-
-# Autres fonctions et déclarations...
+    os.system("python message.py")
 
 ######## Partie GUI ########
 
