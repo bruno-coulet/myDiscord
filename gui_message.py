@@ -90,7 +90,7 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
     #     return checked_checkboxes
 
 
-class Message(ctk.CTk):
+class GuiMessage(ctk.CTk):
     def __init__(self):
         super().__init__()
 
@@ -244,5 +244,5 @@ class Message(ctk.CTk):
   
 if __name__ == "__main__":
 
-    message = Message()
-    message.mainloop()
+    gui_message = GuiMessage()
+    gui_message.mainloop()
