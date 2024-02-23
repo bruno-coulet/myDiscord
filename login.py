@@ -1,24 +1,15 @@
-#!/usr/bin/venv python3
-# -*- coding: utf-8 -*-
-"""
-@author: Lucas SAVIOZ
-@project: myDiscord
-@file: login.py
-@licence: GPLv3
-"""
-
 import os
 import mariadb
 from dotenv import load_dotenv
 import customtkinter as ctk
 import tkinter.messagebox as tkmb
 from constants import *
-from gui_message import *
+from gui_message import GuiMessage  # Importe la classe GuiMessage depuis gui_message.py
 
 # Charge les variables d'environnement à partir du fichier .env
 load_dotenv()
 
-# Récupére les informations de connexion à la base de données à partir des variables d'environnement
+# Récupère les informations de connexion à la base de données à partir des variables d'environnement
 db_host = os.getenv("DB_HOST")
 db_user = os.getenv("DB_USER")
 db_password = os.getenv("DB_PASSWORD")
@@ -83,6 +74,8 @@ class Login:
             row = cursor.fetchone()
             if row:
                 tkmb.showinfo(title="Login Successful", message="You have logged in successfully")
+                # Si le login est réussi, ouvrez GuiMessage
+                self.open_gui_message()
             else:
                 tkmb.showerror(title="Login Failed", message="Invalid name and Password")
         except mariadb.Error as e:
@@ -95,6 +88,13 @@ class Login:
         self.master.destroy()
         os.system("python create_account.py")
 
+    def open_gui_message(self):
+        # Ferme la fenêtre de login
+        self.master.destroy()
+        # Ouvre l'interface GuiMessage
+        app = ctk.CTk()
+        gui_message = GuiMessage()
+        app.mainloop()
 
 # Crée une instance de CTk pour la fenêtre principale
 app = ctk.CTk()
