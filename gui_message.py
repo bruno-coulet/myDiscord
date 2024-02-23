@@ -28,12 +28,12 @@ from constants import *
 from tkinter import ttk
 from modify import Modify
 from db import Db
-from get_data import *
 # from update import Update
 
+db = Db()
 
 """ récupère les DATA depuis la BDD"""
-
+messages = db.query("SELECT content FROM message")
 # NOM du channel ID = 1 EN ATTENDANT DE POUVOIR RECUPERER L'UTILISATEUR CONNECTE
 channel = db.query("SELECT channel_name FROM channel WHERE ID=1")
 channel_name=f"{channel[0][0]}"
@@ -67,7 +67,11 @@ def checkbox_callback(self):
         print("checked checkboxes:")
 
 
-""" affiche les messages existants   Dans le ScrollableFrame, values=[message for message in messages]  """   
+
+
+
+
+""" affiche les messages existants   """   
 class ScrollableFrame(ctk.CTkScrollableFrame):
 
     def __init__(self, master, values):
@@ -160,7 +164,7 @@ class GuiMessage(ctk.CTk):
 
 
         # ----  OLD MESSAGES FRAME -  ROW 1 and 2  COL 1 and 2
-
+         
         self.old_message_frame = ScrollableFrame(self, values=[message for message in messages])
         self.old_message_frame.grid(row=1, column=1, padx=10, pady=(10, 0), sticky="ew", columnspan=2, rowspan=2)
         self.old_message_frame.configure(fg_color=FG_SECOND_COLOR, border_width=2, border_color=BORDER_COLOR)
@@ -236,7 +240,6 @@ class GuiMessage(ctk.CTk):
             else:
                 # Si le canal n'a pas d'utilisateurs associés, insérer simplement le canal dans le Treeview
                 self.channel_tree.insert("", "end", text=channel_name, values=(channel_name))
-
 
 
 
