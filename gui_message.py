@@ -67,7 +67,7 @@ def checkbox_callback(self):
         print("checked checkboxes:")
 
 
-""" affiche les messages existants"""   
+""" affiche les messages existants   Dans le ScrollableFrame, values=[message for message in messages]  """   
 class ScrollableFrame(ctk.CTkScrollableFrame):
 
     def __init__(self, master, values):
@@ -102,7 +102,6 @@ class Message(ctk.CTk):
         # ----  TITLE -             ROW 0     -------
         title_label = ctk.CTkLabel(self, text=f"Bienvenue dans la messagerie {user_first_name_and_name}", font=(TITLE_FONT))
         title_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
-        # title_label.configure(fg_color="grey25")
         title_label.pack_propagate(False)
         
         # ----  LOGOUT       -      ROW 0 COL 2   ---
@@ -113,9 +112,7 @@ class Message(ctk.CTk):
         self.button_log_out.grid(row=0 , column=2, padx=20, pady=20)
 
 
-
-
-        # ----  CHANNEL -           ROW 1,2,3   COL 0   -------
+        # ----  CHANNEL -           ROW 1,2,3,4   COL 0   -------
         self.channel_frame = ctk.CTkFrame(self)
         self.channel_frame.grid(row=1, column=0, padx=10, pady=(10, 0), sticky="ns", rowspan=4)
         self.channel_frame.grid_columnconfigure((0, 1), weight=1)
@@ -138,7 +135,7 @@ class Message(ctk.CTk):
         self.channel_tree.heading("#0", text="Autre channels")
         self.channel_tree.grid(row=1, column=0, padx=10, pady=10, sticky="nsew", rowspan=3)
         # Ajout des channels au Treeview
-        self.add_channels_to_tree(channels_user )
+        self.add_channels_to_tree(channels_user)
 
 
 
@@ -164,7 +161,6 @@ class Message(ctk.CTk):
 
         # ----  OLD MESSAGES FRAME -  ROW 1 and 2  COL 1 and 2
 
-        # self.old_message_frame = ScrollableFrame(self, "Messages existants", values=[message for message in messages])
         self.old_message_frame = ScrollableFrame(self, values=[message for message in messages])
         self.old_message_frame.grid(row=1, column=1, padx=10, pady=(10, 0), sticky="ew", columnspan=2, rowspan=2)
         self.old_message_frame.configure(fg_color=FG_SECOND_COLOR, border_width=2, border_color=BORDER_COLOR)
@@ -210,15 +206,43 @@ class Message(ctk.CTk):
     # def  checkbox_callback(self):
     #     print("checkboxes sélectionnées:", self.checkbox_old_message_frame.get())
 
-    def add_channels_to_tree(self, channels_user ):
-        for channel, users in channels_user .items():
-            # Insérer le channel dans le Treeview
-            channel_node = self.channel_tree.insert("", "end", text=channel, values=(channel))
+    # def add_channels_to_tree(self, channels_user ):
+    #     for channel, users in channels_user .items():
+    #         # Insérer le channel dans le Treeview
+    #         channel_node = self.channel_tree.insert("", "end", text=channel, values=(channel))
             # Ajouter les utilisateurs sous le channel
-            for user in users:
-                self.channel_tree.insert(channel_node, "end", text=user)
+            # for user in users:
+            #     self.channel_tree.insert(channel_node, "end", text=user)
+
+    def add_channels_to_tree(self, channels_user):
+        # Initialise un ensemble vide et récupére tous les noms de channel
+        all_channels = set(channels_user.keys())
+        
+        # Parcours tous les channels dans la BDD et les ajoute à la liste
+        channels_from_db = db.query("SELECT channel_name FROM channel")
+        for channel_data in channels_from_db:
+            channel_name = channel_data[0]
+            all_channels.add(channel_name)
+        
+        for channel_name in all_channels:
+            # Vérifier si le canal a des utilisateurs associés
+            if channel_name in channels_user:
+                users = channels_user[channel_name]
+                # Insérer le canal dans le Treeview
+                channel_node = self.channel_tree.insert("", "end", text=channel_name, values=(channel_name))
+                # Ajouter les utilisateurs sous le canal
+                for user in users:
+                    self.channel_tree.insert(channel_node, "end", text=user)
+            else:
+                # Si le canal n'a pas d'utilisateurs associés, insérer simplement le canal dans le Treeview
+                self.channel_tree.insert("", "end", text=channel_name, values=(channel_name))
+
+
+
+
 
   
+if __name__ == "__main__":
 
-message = Message()
-message.mainloop()
+    message = Message()
+    message.mainloop()
