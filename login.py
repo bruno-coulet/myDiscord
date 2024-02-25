@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 import customtkinter as ctk
 import tkinter.messagebox as tkmb
 from constants import *
-from gui_message import GuiMessage  # Importe la classe GuiMessage depuis gui_message.py
 
 # Charge les variables d'environnement à partir du fichier .env
 load_dotenv()
@@ -92,9 +91,8 @@ class Login:
         # Ferme la fenêtre de login
         self.master.destroy()
         # Ouvre l'interface GuiMessage
-        app = ctk.CTk()
-        gui_message = GuiMessage()
-        app.mainloop()
+        os.system("python gui_message.py")
+
 
 # Crée une instance de CTk pour la fenêtre principale
 app = ctk.CTk()
@@ -103,7 +101,6 @@ app.configure(fg_color=FG_COLOR)
 app.title("myDiscord")
 
 # Crée une instance de la classe Login
-login_window = Login(app)
-
+login = Login(app)
 # Lance la boucle principale de l'application
 app.mainloop()

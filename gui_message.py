@@ -23,10 +23,11 @@ ROW 5       CHANNEL select,     NEW MESSAGE,    send button
 
 """le fichier get_data crée les variables 'messages et 'channels', elles sont appelées par gui_message pour y être affiché"""
 
+import os
 import customtkinter as ctk
 from constants import *
 from tkinter import ttk
-from modify import Modify
+# from modify import Modify
 from db import Db
 # from update import Update
 
@@ -37,15 +38,15 @@ messages = db.query("SELECT content FROM message")
 # NOM du channel ID = 1 EN ATTENDANT DE POUVOIR RECUPERER L'UTILISATEUR CONNECTE
 channel = db.query("SELECT channel_name FROM channel WHERE ID=1")
 channel_name=f"{channel[0][0]}"
-print(channel_name)
+# print(channel_name)
 
 # NOM, PRENOM et ID de l'utilisateur (pour le moment, celui avec l'ID = 1)
 user = db.query("SELECT name, first_name, ID FROM user WHERE ID=1")
 user_first_name_and_name=f"{user[0][1]} {user[0][0]}"
 user_first_name=f'{user[0][1]}'
 user_id=f'{user[0][2]}'
-print(user_first_name_and_name)
-print(user_id)
+# print(user_first_name_and_name)
+# print(user_id)
 
 
 # DATA POUR LE TREEVIEW
@@ -111,6 +112,8 @@ class GuiMessage(ctk.CTk):
         # ----  LOGOUT       -      ROW 0 COL 2   ---
         def log_out():
             print("log out")
+            self.destroy()  # Détruit la fenêtre actuelle
+            os.system("python login.py")
 
         self.button_log_out = ctk.CTkButton(self, text="Se déconnecter", command=log_out)
         self.button_log_out.grid(row=0 , column=2, padx=20, pady=20)
@@ -146,7 +149,7 @@ class GuiMessage(ctk.CTk):
         # ----  CHANNEL / CREATE    ROW 1.5  COL 0
         def create_channel():
             new_channel_name = channel_entry_text.get()  # Récupérer le texte entré dans entry_text
-            modify.createChannel(creator_id=user_id, channel_name=new_channel_name)
+            # modify.createChannel(creator_id=user_id, channel_name=new_channel_name)
             print("Création du channel :", new_channel_name)
             print(f'user_id = {user_id}')
  
@@ -200,7 +203,7 @@ class GuiMessage(ctk.CTk):
         # -------- send message button---------------------------------------------------------------------------------
         def send_message():
             req = f"SELECT channel.channel_name, message.channel_name FROM `channel`, `message` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
-            modify.createMessage(user_name=user_first_name, channel_name=channel_name, content=entry_text.get())
+            # modify.createMessage(user_name=user_first_name, channel_name=channel_name, content=entry_text.get())
             print("send message : ", entry_text.get())
 
         self.button_send_message = ctk.CTkButton(self.message_frame, text="Publier le message", command=lambda: send_message())

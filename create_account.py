@@ -115,8 +115,7 @@ class CreateAccount:
         # Ferme la fenêtre actuelle
         self.master.destroy()
         # Instancie la classe GuiMessage et exécute son instance
-        app = ctk.CTk()
-        gui_message = GuiMessage(app)
+        app = GuiMessage(self.master)
         app.mainloop()
 
 if __name__ == "__main__":
