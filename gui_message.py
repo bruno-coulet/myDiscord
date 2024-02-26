@@ -26,7 +26,9 @@ from constants import *
 from tkinter import ttk
 from modify import Modify
 from db import Db
+import sys
 import os
+
 # from update import Update
 
 db = Db()
@@ -36,10 +38,10 @@ modify=Modify()
 messages = db.query("SELECT content FROM message")
 channel = db.query("SELECT channel_name FROM channel WHERE ID=1")
 channel_name=f"{channel[0][0]}"
-user = db.query("SELECT name, first_name, ID FROM user WHERE ID=1")
-user_first_name_and_name=f"{user[0][1]} {user[0][0]}"
-user_first_name=f'{user[0][1]}'
-user_id=f'{user[0][2]}'
+# user = db.query("SELECT name, first_name, ID FROM user WHERE ID=1")
+# user_first_name_and_name=f"{user[0][1]} {user[0][0]}"
+# user_first_name=f'{user[0][1]}'
+# user_id=f'{user[0][2]}'
 # DATA POUR LE TREEVIEW
 channels_data = db.query("SELECT c.id, c.channel_name, u.first_name FROM channel c JOIN channel_user cu ON c.id = cu.channel_id JOIN user u ON cu.user_id = u.id")
 channels_user  = {}
@@ -52,8 +54,29 @@ for channel_id, channel_name, user_name in channels_data:
         # ajoute l'utilisateur actuel à la liste existante d'utilisateurs
         channels_user [channel_name].append(user_name)
 print(f'nom du channel : {channel_name}')
-print(f'prénom et nom de l\'utilisateur : {user_first_name_and_name}')
-print(f'id de l\'utilisateur : {user_id}')
+# print(f'prénom et nom de l\'utilisateur : {user_first_name_and_name}')
+# print(f'id de l\'utilisateur : {user_id}')
+
+
+
+# Charge le nom d'utilisateur passé en argument en ligne de commande
+current_user = sys.argv[1] if len(sys.argv) > 1 else "Unknown User"
+
+# Extrait le nom d'utilisateur à partir de l'argument en ligne de commande
+current_user = current_user.strip()
+
+# Récupère les données depuis la BDD
+# messages = []  # Modifier pour récupérer les messages depuis la BDD
+# channel_name = "General"  # Modifier pour récupérer le nom du canal depuis la BDD
+
+
+
+
+
+
+# SERVIRA PEUT ETRE UN JOUR CHOISIR LE MODE AUDIO
+def checkbox_callback(self):
+    print("checked checkboxes:")
 
 # SERVIRA PEUT ETRE UN JOUR CHOISIR LE MODE AUDIO
 # def checkbox_callback(self):
@@ -163,7 +186,7 @@ class Message(ctk.CTk):
         # -------- send message button---------------------------------------------------------------------------------
         def send_message():
             req = f"SELECT channel.channel_name, message.channel_name FROM `channel`, `message` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
-            # modify.createMessage(user_name=user_first_name, channel_name=channel_name, content=entry_text.get())
+            modify.createMessage(user_name=current_user, channel_name=channel_name, content=entry_text.get())
             print("send message : ", entry_text.get())
 
         self.button_send_message = ctk.CTkButton(self.message_frame, text="Publier le message", command=lambda: send_message())
