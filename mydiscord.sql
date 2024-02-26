@@ -30,9 +30,8 @@ INSERT INTO rooms(name) VALUE ('default');
 CREATE TABLE default_room(
     id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     id_user INT UNSIGNED NOT NULL,
-    mes JSON NOT NULL
-        CHECK (JSON_VALID(mes)),
-    date DATETIME NOT NULL DEFAULT NOW(),
+    mes LONGTEXT NOT NULL,
+    date TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT  `fk_default_room_user` FOREIGN KEY (id_user) REFERENCES users(id)
                          ON DELETE CASCADE
                          ON UPDATE CASCADE
@@ -53,7 +52,7 @@ CREATE TABLE connexions(
     id_user INT UNSIGNED NOT NULL ,
     uuid_client VARCHAR(255) NOT NULL ,
     connect BOOLEAN DEFAULT FALSE,
-    last_connection DATE DEFAULT NOW(),
+    last_connection TIMESTAMP DEFAULT NOW(),
     CONSTRAINT `fk_connexions_user` FOREIGN KEY (id_user) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `pk_connexions` PRIMARY KEY (id_user, uuid_client)
 ) ENGINE = InnoDB;

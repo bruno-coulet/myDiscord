@@ -12,7 +12,7 @@
 from db import Db
 from lib import *
 import uuid
-from threading import Thread
+# from threading import Thread
 
 
 class Client:
@@ -64,14 +64,14 @@ class Client:
 
     def get_uuid(self):
         """
-        Returns the uuid of the client.
+        returns the uuid of the client.
         :return: str uuid
         """
         return self.__uuid
 
     def register(self, firstname, lastname, email, password, nickname="Anonymous"):
         """
-        Register a new user in the database
+        Register a new user in the database using the provided parameters
         :param firstname: user's first
         :param lastname: user's last name
         :param email: user's email
@@ -96,8 +96,8 @@ class Client:
 
     def change_password(self, password):
         """
-        Change password of the user
-        :param password: new password of the user
+        Change user's password
+        :param password: new password
         :return: None
         """
         req = f"UPDATE users SET password = \'{hash_pass(password)}\' where id = {self.get_id()}"
@@ -141,7 +141,7 @@ class Client:
         :return: None
         """
         if self.get_state():
-            req = f"UPDATE connexions SET connexions.connect = FALSE WHERE id_user = \'{self.get_id()}\' AND uuid_client = \'{self.get_uuid()}\'"
+            req = f"UPDATE connexions SET connexions.connect = FALSE WHERE id_user = {self.get_id()} AND uuid_client = \'{self.get_uuid()}\'"
             self.__db.query(req, mod=True)
             self.change_state_connect()
             self.__db.disconnect()
@@ -198,9 +198,13 @@ class Client:
         :param room_name: string room_name
         :return: list of messages
         """
-        req = f""
         if self.__state_connect:
-            req = f"SELECT * FROM {room_name}_room WHERE date = DAY()"
+            req = f"SELECT type FROM {room_name}_rooms WHERE name = '{room_name}'"
+            if self.__db.query(req) == 'Public':
+                req = f"SELECT * FROM {room_name}_room WHERE date = DAY(NOW())"
+                self.__db.query(req)
+            else:
+                req = f"SELECT * FROM {room_name}"
             return self.__db.query(req)
 
     def command(self, action: str):
@@ -225,8 +229,8 @@ class Client:
                         return None
                     para_1 = ("id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,\n",
                               "id_user INT UNSIGNED NOT NULL,\n",
-                              "mes JSON NOT NULL CHECK (JSON_VALID(mes)),\n",
-                              "date DATETIME NOT NULL DEFAULT NOW(),\n",
+                              "mes LONGTEXT NOT NULL,\n",
+                              "date TIMESTAMP NOT NULL DEFAULT NOW(),\n",
                               f"CONSTRAINT  fk_{cmd[1]}_room_user FOREIGN KEY (id_user) REFERENCES users (id)\n",
                               "ON DELETE CASCADE\n",
                               "ON UPDATE CASCADE",
