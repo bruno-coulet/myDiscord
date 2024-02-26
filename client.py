@@ -16,6 +16,9 @@ from threading import Thread
 
 
 class Client:
+    """
+    Client class
+    """
     def __init__(self):
         self.__db = Db()
         self.__state_connect = False
@@ -88,7 +91,7 @@ class Client:
         :param email: new email address of the user
         :return: None
         """
-        req = f"UPDATE users SET email = \'{email} where id = \'{self.get_id()}\'"
+        req = f"UPDATE users SET email = \'{email}\' where id = {self.get_id()}"
         self.__db.query(req, mod=True)
 
     def change_password(self, password):
@@ -97,7 +100,7 @@ class Client:
         :param password: new password of the user
         :return: None
         """
-        req = f"UPDATE users SET password = \'{hash_pass(password)}\' where id = \'{self.get_id()}\'"
+        req = f"UPDATE users SET password = \'{hash_pass(password)}\' where id = {self.get_id()}"
         self.__db.query(req, mod=True)
 
     def change_nickname(self, nickname):
@@ -106,7 +109,8 @@ class Client:
         :param nickname: new nickname of the user
         :return: None
         """
-        req = f"UPDATE users SET nickname = \'{nickname}\' where id = \'{self.get_id()}\'"
+        req = f"UPDATE users SET nickname = \'{nickname}\' where id = {self.get_id()}"
+        self.__db.query(req, mod=True)
 
     def connect(self, email, password):
         """
@@ -143,24 +147,57 @@ class Client:
             self.__db.disconnect()
 
     def create_room(self, channel):
+        """
+        Create a new room
+        :param channel: string channel_name [Public | Private]
+        :return: None
+        """
         self.command("! CREATE " + channel)
 
     def destroy_room(self, channel):
+        """
+        Destroy channel room
+        :param channel: string channel_name
+        :return: None
+        """
         self.command("! DESTROY " + channel)
 
     def join_room(self, channel):
+        """
+        Join channel room
+        :param channel: string channel_name
+        :return: None
+        """
         self.command("! JOIN " + channel)
 
     def leave_room(self, channel):
+        """
+        Leave channel room
+        :param channel: string channel name
+        :return: None
+        """
         self.command("! LEAVE " + channel)
 
     def display_rooms(self):
+        """
+        Display all channel rooms
+        :return: List of channel rooms
+        """
         return self.command("! ROOMS")
 
     def display_users_rooms(self):
+        """
+        Display all users connected
+        :return: List of users
+        """
         return self.command("! USERS")
 
     def display_msg(self, room_name):
+        """
+        Display all messages in channel room name
+        :param room_name: string room_name
+        :return: list of messages
+        """
         req = f""
         if self.__state_connect:
             req = f"SELECT * FROM {room_name}_room WHERE date = DAY()"
@@ -242,5 +279,4 @@ if __name__ == "__main__":
     client.register('Cyril', 'GENISSON', 'cyril.genisson@local.lan', 'PassWord1!', nickname='Kaman')
     client.connect("cyril.geisson@local.lan", "PassWor1!")
     client.create_room('')
-    #  client.destroy_room('Sex')
     client.logout()
