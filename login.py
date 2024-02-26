@@ -95,4 +95,3 @@ app.title("myDiscord")
 login = Login(app)
 # Lance la boucle principale de l'application
 app.mainloop()
-
