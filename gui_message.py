@@ -26,6 +26,7 @@ from constants import *
 from tkinter import ttk
 from modify import Modify
 from db import Db
+import os
 # from update import Update
 
 db = Db()
@@ -169,5 +170,5 @@ class Message(ctk.CTk):
         self.button_send_message.grid(row=3, column=0, padx=20, pady=20)
 
 if __name__ == "__main__":
-    gui_message = GuiMessage()
+    gui_message = Message()
     gui_message.mainloop()
