@@ -21,30 +21,55 @@ ROW 5       CHANNEL select,     NEW MESSAGE,    send button
 
 """
 
-"""le fichier get_data crée les variables 'messages et 'channels', elles sont appelées par gui_message pour y être affiché"""
-
-import os
 import customtkinter as ctk
 from constants import *
 from tkinter import ttk
-import sys
+from modify import Modify
+from db import Db
+# from update import Update
 
-# Charge le nom d'utilisateur passé en argument en ligne de commande
-current_user = sys.argv[1] if len(sys.argv) > 1 else "Unknown User"
+db = Db()
+modify=Modify()
 
-# Extrait le nom d'utilisateur à partir de l'argument en ligne de commande
-current_user = current_user.strip()
-
-# Récupère les données depuis la BDD
-messages = []  # Modifier pour récupérer les messages depuis la BDD
-channel_name = "General"  # Modifier pour récupérer le nom du canal depuis la BDD
+""" récupère les DATA depuis la BDD"""
+messages = db.query("SELECT content FROM message")
+channel = db.query("SELECT channel_name FROM channel WHERE ID=1")
+channel_name=f"{channel[0][0]}"
+user = db.query("SELECT name, first_name, ID FROM user WHERE ID=1")
+user_first_name_and_name=f"{user[0][1]} {user[0][0]}"
+user_first_name=f'{user[0][1]}'
+user_id=f'{user[0][2]}'
+# DATA POUR LE TREEVIEW
+channels_data = db.query("SELECT c.id, c.channel_name, u.first_name FROM channel c JOIN channel_user cu ON c.id = cu.channel_id JOIN user u ON cu.user_id = u.id")
+channels_user  = {}
+for channel_id, channel_name, user_name in channels_data:  
+    if channel_name not in channels_user :
+        #  initialise une liste d'utilisateur associé au channel
+        #  attribue cette liste à la clé channel_name.
+        channels_user [channel_name] = [user_name]
+    else:
+        # ajoute l'utilisateur actuel à la liste existante d'utilisateurs
+        channels_user [channel_name].append(user_name)
+print(f'nom du channel : {channel_name}')
+print(f'prénom et nom de l\'utilisateur : {user_first_name_and_name}')
+print(f'id de l\'utilisateur : {user_id}')
 
 # SERVIRA PEUT ETRE UN JOUR CHOISIR LE MODE AUDIO
-def checkbox_callback(self):
-    print("checked checkboxes:")
+# def checkbox_callback(self):
+#         print("checked checkboxes:")
+
+#     # def get(self):
+#     #     checked_checkboxes = []
+#     #     for checkbox in self.checkboxes:
+#     #         if checkbox.get() == 1:
+#     #             checked_checkboxes.append(checkbox.cget("text"))
+#     #     return checked_checkboxes 
 
 
-""" Affiche les messages existants """
+
+
+
+""" affiche les messages existants   """   
 class ScrollableFrame(ctk.CTkScrollableFrame):
 
     def __init__(self, master, values):
@@ -52,12 +77,16 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
         self.grid_columnconfigure(0, weight=1)
         self.values = values
         self.configure(fg_color=FG_SECOND_COLOR)
+        # self.checkboxes = []
 
         for i, value in enumerate(self.values):
             label = ctk.CTkLabel(self, text=value)
             label.grid(row=i+1, column=0, padx=10, pady=(10, 0))
 
-class GuiMessage(ctk.CTk):
+
+
+class Message(ctk.CTk):
+
     def __init__(self):
         super().__init__()
 
