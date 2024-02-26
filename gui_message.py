@@ -21,8 +21,6 @@ ROW 5       CHANNEL select,     NEW MESSAGE,    send button
 
 """
 
-"""le fichier get_data crée les variables 'messages et 'channels', elles sont appelées par gui_message pour y être affiché"""
-
 import customtkinter as ctk
 from constants import *
 from tkinter import ttk
@@ -31,23 +29,16 @@ from db import Db
 # from update import Update
 
 db = Db()
+modify=Modify()
 
 """ récupère les DATA depuis la BDD"""
 messages = db.query("SELECT content FROM message")
-# NOM du channel ID = 1 EN ATTENDANT DE POUVOIR RECUPERER L'UTILISATEUR CONNECTE
 channel = db.query("SELECT channel_name FROM channel WHERE ID=1")
 channel_name=f"{channel[0][0]}"
-print(channel_name)
-
-# NOM, PRENOM et ID de l'utilisateur (pour le moment, celui avec l'ID = 1)
 user = db.query("SELECT name, first_name, ID FROM user WHERE ID=1")
 user_first_name_and_name=f"{user[0][1]} {user[0][0]}"
 user_first_name=f'{user[0][1]}'
 user_id=f'{user[0][2]}'
-print(user_first_name_and_name)
-print(user_id)
-
-
 # DATA POUR LE TREEVIEW
 channels_data = db.query("SELECT c.id, c.channel_name, u.first_name FROM channel c JOIN channel_user cu ON c.id = cu.channel_id JOIN user u ON cu.user_id = u.id")
 channels_user  = {}
@@ -59,13 +50,20 @@ for channel_id, channel_name, user_name in channels_data:
     else:
         # ajoute l'utilisateur actuel à la liste existante d'utilisateurs
         channels_user [channel_name].append(user_name)
-
-
+print(f'nom du channel : {channel_name}')
+print(f'prénom et nom de l\'utilisateur : {user_first_name_and_name}')
+print(f'id de l\'utilisateur : {user_id}')
 
 # SERVIRA PEUT ETRE UN JOUR CHOISIR LE MODE AUDIO
-def checkbox_callback(self):
-        print("checked checkboxes:")
+# def checkbox_callback(self):
+#         print("checked checkboxes:")
 
+#     # def get(self):
+#     #     checked_checkboxes = []
+#     #     for checkbox in self.checkboxes:
+#     #         if checkbox.get() == 1:
+#     #             checked_checkboxes.append(checkbox.cget("text"))
+#     #     return checked_checkboxes 
 
 
 
@@ -79,22 +77,16 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
         self.grid_columnconfigure(0, weight=1)
         self.values = values
         self.configure(fg_color=FG_SECOND_COLOR)
-        # self.title_label.configure(fg_color=FG_SECOND_COLOR)
         # self.checkboxes = []
 
         for i, value in enumerate(self.values):
             label = ctk.CTkLabel(self, text=value)
             label.grid(row=i+1, column=0, padx=10, pady=(10, 0))
 
-    # def get(self):
-    #     checked_checkboxes = []
-    #     for checkbox in self.checkboxes:
-    #         if checkbox.get() == 1:
-    #             checked_checkboxes.append(checkbox.cget("text"))
-    #     return checked_checkboxes
 
 
 class Message(ctk.CTk):
+
     def __init__(self):
         super().__init__()
 
