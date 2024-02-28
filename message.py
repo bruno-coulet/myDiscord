@@ -9,7 +9,7 @@ class Message:
 
    def create(self, user_name, channel_name, content):
       query = f'INSERT INTO {self.table}(user_name, channel_name, content) VALUES (\'{user_name}\', \'{channel_name}\', \'{content}\')'
-      self.db.query(query, modif=True)
+      self.db.query(query, mod=True)
 
 
    # def create(self, user_name, channel_name, content):
