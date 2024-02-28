@@ -225,8 +225,8 @@ class Client:
                         return None
                     para_1 = ("id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,\n",
                               "id_user INT UNSIGNED NOT NULL,\n",
-                              "mes JSON NOT NULL CHECK (JSON_VALID(mes)),\n",
-                              "date DATETIME NOT NULL DEFAULT NOW(),\n",
+                              "mes LONGTEXT NOT NULL,\n",
+                              "date TIMESTAMP NOT NULL DEFAULT NOW(),\n",
                               f"CONSTRAINT  fk_{cmd[1]}_room_user FOREIGN KEY (id_user) REFERENCES users (id)\n",
                               "ON DELETE CASCADE\n",
                               "ON UPDATE CASCADE",
@@ -276,7 +276,7 @@ class Client:
 
 if __name__ == "__main__":
     client = Client()
-    client.register('Cyril', 'GENISSON', 'cyril.genisson@local.lan', 'PassWord1!', nickname='Kaman')
-    client.connect("cyril.geisson@local.lan", "PassWor1!")
-    client.create_room('')
+    client.register('Bruno', 'Coulet', 'cyril.genisson@local.lan', 'PassWord1!', nickname='GrandManitou')
+    client.connect("cyril.genisson@local.lan", "PassWord1!")
+    client.destroy_room('Fuck')
     client.logout()
