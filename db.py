@@ -28,6 +28,7 @@ class Db:
         self.__database = os.getenv('DB_NAME')
         self.base = None
         self.cursor = None
+        self.connect()
 
     def connect(self):
         """
