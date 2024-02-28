@@ -36,12 +36,14 @@ modify=Modify()
 
 """ récupère les DATA depuis la BDD"""
 messages = db.query("SELECT content FROM message")
-channel = db.query("SELECT channel_name FROM channel WHERE ID=1")
-channel_name=f"{channel[0][0]}"
-users = db.query("SELECT lastname, firstname, ID FROM users WHERE ID=1")
-user_first_name_and_name=f"{users[0][1]} {users[0][0]}"
-user_first_name=f'{users[0][1]}'
-user_id=f'{users[0][2]}'
+
+# channel = db.query("SELECT channel_name FROM channel WHERE ID=1")
+# channel_name=f"{channel[0][0]}"
+# users = db.query("SELECT lastname, firstname, ID FROM users WHERE ID=1")
+# user_first_name_and_name=f"{users[0][1]} {users[0][0]}"
+# user_first_name=f'{users[0][1]}'
+# user_id=f'{users[0][2]}'
+
 # DATA POUR LE TREEVIEW
 channels_data = db.query("SELECT c.id, c.channel_name, u.firstname FROM channel c JOIN channel_user cu ON c.id = cu.channel_id JOIN users u ON cu.user_id = u.id")
 channels_user  = {}
