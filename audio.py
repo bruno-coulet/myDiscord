@@ -40,7 +40,10 @@ def play(records, samplerate=44100):
 
 if __name__ == "__main__":
     recording = record(10)
-    play(recording)
+    print(recording)
+    while True:
+        play(recording)
+
     # This will convert the NumPy array to an audio
     # file with the given sampling frequency
     write("recording0.wav", 44100, recording)
