@@ -63,7 +63,7 @@ class Login:
                 database=db_name
             )
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM user WHERE name = %s AND password = %s", (name, password))
+            cursor.execute("SELECT * FROM users WHERE name = %s AND password = %s", (name, password))
             row = cursor.fetchone()
             if row:
                 tkmb.showinfo(title="Login Successful", message="You have logged in successfully")
