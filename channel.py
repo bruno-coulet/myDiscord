@@ -28,7 +28,7 @@ class Channel:
        
    def create(self, creator_id, channel_name):
       # Récupérer les informations de l'utilisateur à partir de son ID
-      user_query = f'SELECT first_name, name FROM user WHERE id = {creator_id}'
+      user_query = f'SELECT first_name, name FROM users WHERE id = {creator_id}'
       user_result = self.db.query(user_query)
 
       if user_result:
