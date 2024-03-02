@@ -26,6 +26,7 @@ from constants import *
 from tkinter import ttk
 from modify import Modify
 from db import Db
+import tkinter.messagebox as tkmb
 import sys
 import os
 
@@ -38,7 +39,7 @@ modify=Modify()
 messages = db.query("SELECT content FROM message")
 
 
-# Charge le nom d'utilisateur passé en argument en ligne de commande
+# Charge le nom d'utilisateur passé en argument en ligne de commande sinon utilisateur inconnu
 current_user = sys.argv[1] if len(sys.argv) > 1 else "Unknown User"
 
 # Extrait le nom d'utilisateur à partir de l'argument en ligne de commande
@@ -75,7 +76,7 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
         super().__init__(master)
         self.grid_columnconfigure(0, weight=1)
         self.values = values
-        self.configure(fg_color=FG_SECOND_COLOR)  # Couleur du texte pour tout le cadre
+        self.configure(fg_color=FG_SECOND_COLOR)
         # self.checkboxes = []
 
         for i, value in enumerate(self.values):
@@ -157,10 +158,20 @@ class Message(ctk.CTk):
 
         # ----  CHANNEL / CREATE    ROW 1.5  COL 0
         def create_channel():
-            new_channel_name = channel_entry_text.get()  # Récupére le texte entré dans entry_text
-            modify.createChannel(creator_id=user_id, channel_name=new_channel_name)
-            print("Création du channel :", new_channel_name)
-            print(f'user_id = {user_id}')
+            new_channel_name = channel_entry_text.get()  # Récupère le texte entré dans entry_text
+
+            # Recherche de l'user_id du créateur dans la base de données
+            creator_id_query = f"SELECT id FROM users WHERE nickname = '{current_user}'"
+            result = db.query(creator_id_query)  # Utilise query pour obtenir un seul résultat
+
+            if result:
+                creator_id = result[0]  # Si un résultat est trouvé, récupère l'user_id
+                modify.createChannel(creator_id=creator_id, channel_name=new_channel_name)
+                tkmb.showinfo(title="Channel Created", message="Channel created successfully")
+            else:
+                tkmb.showerror(title="Error", message="User not found")
+
+
 
         
         new_channel_label = ctk.CTkLabel(self.channel_frame, text="Créez un channel :", font=SUBTITLE_FONT, text_color=TEXT_COLOR)
@@ -168,7 +179,7 @@ class Message(ctk.CTk):
         # --------  input area
         channel_entry_text = ctk.CTkEntry(self.channel_frame)
         channel_entry_text.grid(row=4, column=0, padx=10, pady=10)
-        channel_entry_text.configure(fg_color=FG_COLOR, border_width=2, border_color=BORDER_COLOR)
+        channel_entry_text.configure(fg_color=FG_COLOR, border_width=2, border_color=BORDER_COLOR, text_color=TEXT_COLOR)
         # -------- create channel button---------------------------------------------------------------------------------
         self.button_create_channel = ctk.CTkButton(self.channel_frame, text="Valider le channel", text_color=TEXT_COLOR, command=create_channel)
         self.button_create_channel.grid(row=5, column=0, padx=20, pady=20, sticky="s")
