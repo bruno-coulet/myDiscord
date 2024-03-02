@@ -280,7 +280,7 @@ class Client:
 
 if __name__ == "__main__":
     client = Client()
-    client.register('Cyril', 'GENISSON', 'cyril.genisson@local.lan', 'PassWord1!', nickname='Kaman')
-    client.connect("cyril.genisson@local.lan", "PassWord1!")
+    client.register('Arthur', 'MARTIN', 'arthur.martin@local.lan', '123SOLEIL', nickname='Electrolux')
+    client.connect("lucas.savvioz@local.lan", "123SOLEIL")
     client.create_room('BeachBoys')
     client.logout()
