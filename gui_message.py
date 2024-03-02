@@ -156,7 +156,7 @@ class Message(ctk.CTk):
 
         # ----  CHANNEL / CREATE    ROW 1.5  COL 0
         def create_channel():
-            new_channel_name = channel_entry_text.get()  # Récupérer le texte entré dans entry_text
+            new_channel_name = channel_entry_text.get()  # Récupére le texte entré dans entry_text
             modify.createChannel(creator_id=user_id, channel_name=new_channel_name)
             print("Création du channel :", new_channel_name)
             print(f'user_id = {user_id}')

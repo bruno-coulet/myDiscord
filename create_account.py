@@ -51,10 +51,10 @@ class CreateAccount:
         self.nickname_entry.pack(pady=12, padx=10)
 
         # Champ de texte pour le nom (Name)
-        self.name_entry = ctk.CTkEntry(master=frame, placeholder_text="Name", fg_color=FG_TEXT_FIELD,
+        self.user_name_entry = ctk.CTkEntry(master=frame, placeholder_text="Name", fg_color=FG_TEXT_FIELD,
                                         text_color=TEXT_COLOR, border_color=BORDER_COLOR,
                                         placeholder_text_color=TEXT_COLOR, font=FONT, width=250)
-        self.name_entry.pack(pady=12, padx=10)
+        self.user_name_entry.pack(pady=12, padx=10)
 
         # Champ de texte pour le prénom (Firstname)
         self.firstname_entry = ctk.CTkEntry(master=frame, placeholder_text="Firstname", fg_color=FG_TEXT_FIELD,
@@ -69,10 +69,10 @@ class CreateAccount:
         self.email_entry.pack(pady=12, padx=10)
 
         # Champ de texte pour le mot de passe
-        self.password_entry = ctk.CTkEntry(master=frame, placeholder_text="Password", fg_color=FG_TEXT_FIELD,
+        self.user_password_entry = ctk.CTkEntry(master=frame, placeholder_text="Password", fg_color=FG_TEXT_FIELD,
                                            text_color=TEXT_COLOR, border_color=BORDER_COLOR,
                                            placeholder_text_color=TEXT_COLOR, show="*", font=FONT, width=250)
-        self.password_entry.pack(pady=12, padx=30)
+        self.user_password_entry.pack(pady=12, padx=30)
         
         # Case à cocher pour afficher le mot de passe
         self.show_password_var = ctk.IntVar()
@@ -94,13 +94,13 @@ class CreateAccount:
     
     def toggle_password_visibility(self, *args):
         if self.show_password_var.get() == 1:
-            self.password_entry.configure(show="")
+            self.user_password_entry.configure(show="")
         else:
-            self.password_entry.configure(show="*")
+            self.user_password_entry.configure(show="*")
 
     def create_account(self):
-        name = self.user_entry.get()
-        password = self.user_password.get()
+        name = self.user_name_entry.get()
+        password = self.user_password_entry.get()
         try:
             conn = mariadb.connect(
                 user=db_user,
@@ -110,7 +110,7 @@ class CreateAccount:
                 database=db_name
             )
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO users (name, password) VALUES (%s, %s)", (name, password))
+            cursor.execute("INSERT INTO users (lastname, pwd) VALUES (%s, %s)", (name, password))
             conn.commit()
             tkmb.showinfo(title="Account Created", message="Account created successfully")
         except mariadb.Error as e:
