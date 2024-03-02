@@ -44,15 +44,41 @@ class CreateAccount:
         label = ctk.CTkLabel(master=frame, text='Create Account', text_color=TEXT_COLOR, font=SUBTITLE_FONT)
         label.pack(pady=12, padx=10)
 
-        self.user_entry = ctk.CTkEntry(master=frame, placeholder_text="Name", fg_color=FG_TEXT_FIELD,
+        # Champ de texte pour le surnom (Nickname)
+        self.nickname_entry = ctk.CTkEntry(master=frame, placeholder_text="Nickname", fg_color=FG_TEXT_FIELD,
                                         text_color=TEXT_COLOR, border_color=BORDER_COLOR,
                                         placeholder_text_color=TEXT_COLOR, font=FONT, width=250)
-        self.user_entry.pack(pady=12, padx=10)
+        self.nickname_entry.pack(pady=12, padx=10)
 
-        self.user_password = ctk.CTkEntry(master=frame, placeholder_text="Password", fg_color=FG_TEXT_FIELD,
+        # Champ de texte pour le nom (Name)
+        self.name_entry = ctk.CTkEntry(master=frame, placeholder_text="Name", fg_color=FG_TEXT_FIELD,
+                                        text_color=TEXT_COLOR, border_color=BORDER_COLOR,
+                                        placeholder_text_color=TEXT_COLOR, font=FONT, width=250)
+        self.name_entry.pack(pady=12, padx=10)
+
+        # Champ de texte pour le prénom (Firstname)
+        self.firstname_entry = ctk.CTkEntry(master=frame, placeholder_text="Firstname", fg_color=FG_TEXT_FIELD,
+                                        text_color=TEXT_COLOR, border_color=BORDER_COLOR,
+                                        placeholder_text_color=TEXT_COLOR, font=FONT, width=250)
+        self.firstname_entry.pack(pady=12, padx=10)
+
+        # Champ de texte pour l'email
+        self.email_entry = ctk.CTkEntry(master=frame, placeholder_text="Email", fg_color=FG_TEXT_FIELD,
+                                        text_color=TEXT_COLOR, border_color=BORDER_COLOR,
+                                        placeholder_text_color=TEXT_COLOR, font=FONT, width=250)
+        self.email_entry.pack(pady=12, padx=10)
+
+        # Champ de texte pour le mot de passe
+        self.password_entry = ctk.CTkEntry(master=frame, placeholder_text="Password", fg_color=FG_TEXT_FIELD,
                                            text_color=TEXT_COLOR, border_color=BORDER_COLOR,
                                            placeholder_text_color=TEXT_COLOR, show="*", font=FONT, width=250)
-        self.user_password.pack(pady=12, padx=30)
+        self.password_entry.pack(pady=12, padx=30)
+        
+        # Case à cocher pour afficher le mot de passe
+        self.show_password_var = ctk.IntVar()
+        self.show_password_check = ctk.CTkCheckBox(master=frame, text="Show Password", text_color=TEXT_COLOR, variable=self.show_password_var)
+        self.show_password_check.pack(pady=12, padx=10)
+        self.show_password_var.trace_add("write", self.toggle_password_visibility)
 
         button_frame = ctk.CTkFrame(master=frame)
         button_frame.pack(pady=12, padx=10)
@@ -62,11 +88,15 @@ class CreateAccount:
         create_account_label.grid(row=1, column=1)
         create_account_label.bind("<Button-1>", lambda event: self.create_account())
 
-        # Création d'un label pour le texte "Back to login"
         back_to_login_label = ctk.CTkLabel(master=button_frame, text='Back to login', bg_color=FG_SECOND_COLOR, font=FONT, text_color=TEXT_COLOR, cursor="hand2", padx=10)
         back_to_login_label.grid(row=1, column=2)
         back_to_login_label.bind("<Button-1>", lambda event: back_to_login())  # Ouvre la fonction back_to_login lorsqu'on clique dessus
-
+    
+    def toggle_password_visibility(self, *args):
+        if self.show_password_var.get() == 1:
+            self.password_entry.configure(show="")
+        else:
+            self.password_entry.configure(show="*")
 
     def create_account(self):
         name = self.user_entry.get()
@@ -80,7 +110,7 @@ class CreateAccount:
                 database=db_name
             )
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO user (name, password) VALUES (%s, %s)", (name, password))
+            cursor.execute("INSERT INTO users (name, password) VALUES (%s, %s)", (name, password))
             conn.commit()
             tkmb.showinfo(title="Account Created", message="Account created successfully")
         except mariadb.Error as e:

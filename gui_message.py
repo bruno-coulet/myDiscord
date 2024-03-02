@@ -37,29 +37,6 @@ modify=Modify()
 """ récupère les DATA depuis la BDD"""
 messages = db.query("SELECT content FROM message")
 
-# channel = db.query("SELECT channel_name FROM channel WHERE ID=1")
-# channel_name=f"{channel[0][0]}"
-# users = db.query("SELECT lastname, firstname, ID FROM users WHERE ID=1")
-# user_first_name_and_name=f"{users[0][1]} {users[0][0]}"
-# user_first_name=f'{users[0][1]}'
-# user_id=f'{users[0][2]}'
-
-# DATA POUR LE TREEVIEW
-channels_data = db.query("SELECT c.id, c.channel_name, u.firstname FROM channel c JOIN channel_user cu ON c.id = cu.channel_id JOIN users u ON cu.user_id = u.id")
-channels_user  = {}
-for channel_id, channel_name, user_name in channels_data:  
-    if channel_name not in channels_user :
-        #  initialise une liste d'utilisateur associé au channel
-        #  attribue cette liste à la clé channel_name.
-        channels_user [channel_name] = [user_name]
-    else:
-        # ajoute l'utilisateur actuel à la liste existante d'utilisateurs
-        channels_user [channel_name].append(user_name)
-print(f'nom du channel : {channel_name}')
-# print(f'prénom et nom de l\'utilisateur : {user_first_name_and_name}')
-# print(f'id de l\'utilisateur : {user_id}')
-
-
 
 # Charge le nom d'utilisateur passé en argument en ligne de commande
 current_user = sys.argv[1] if len(sys.argv) > 1 else "Unknown User"
@@ -77,12 +54,8 @@ current_user = current_user.strip()
 
 
 # SERVIRA PEUT ETRE UN JOUR CHOISIR LE MODE AUDIO
-def checkbox_callback(self):
-    print("checked checkboxes:")
-
-# SERVIRA PEUT ETRE UN JOUR CHOISIR LE MODE AUDIO
 # def checkbox_callback(self):
-#         print("checked checkboxes:")
+#     print("checked checkboxes:")
 
 #     # def get(self):
 #     #     checked_checkboxes = []
@@ -121,6 +94,24 @@ class Message(ctk.CTk):
         self.grid_columnconfigure((0, 1), weight=1)
         self.configure(fg_color=FG_COLOR)
 
+
+        # DATA POUR LE TREEVIEW
+        channels_data = db.query("SELECT c.channel_name, u.firstname FROM channel c LEFT JOIN channel_user cu ON c.id = cu.channel_id LEFT JOIN users u ON cu.user_id = u.id")
+
+        # Dictionnaire pour stocker les canaux et les utilisateurs
+        channels_user  = {}
+        for channel_name, user_name in channels_data:  
+            if channel_name not in channels_user :
+                #  initialise une liste d'utilisateur associé au channel
+                #  attribue cette liste à la clé channel_name.
+                channels_user [channel_name] = [user_name]
+            else:
+                # ajoute l'utilisateur au channel existant
+                channels_user [channel_name].append(user_name)
+        print(f'nom du channel : {channel_name}')
+        # print(f'prénom et nom de l\'utilisateur : {user_first_name_and_name}')
+        # print(f'id de l\'utilisateur : {user_id}')
+
         # ----  TITLE -             ROW 0     -------
         title_label = ctk.CTkLabel(self, text=f"Bienvenue dans la messagerie {current_user}", font=(TITLE_FONT))
         title_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
@@ -157,6 +148,32 @@ class Message(ctk.CTk):
         self.channel_tree = ttk.Treeview(self.current_channel_frame)
         self.channel_tree.heading("#0", text="Autre channels")
         self.channel_tree.grid(row=1, column=0, padx=10, pady=10, sticky="nsew", rowspan=3)
+
+        # Ajouter des canaux au treeview
+        for channel_name, users in channels_user.items():
+            self.channel_tree.insert("", "end", text=channel_name)
+        
+
+        # ----  CHANNEL / CREATE    ROW 1.5  COL 0
+        def create_channel():
+            new_channel_name = channel_entry_text.get()  # Récupérer le texte entré dans entry_text
+            modify.createChannel(creator_id=user_id, channel_name=new_channel_name)
+            print("Création du channel :", new_channel_name)
+            print(f'user_id = {user_id}')
+
+        
+        new_channel_label = ctk.CTkLabel(self.channel_frame, text="Créez un channel :", font=SUBTITLE_FONT)
+        new_channel_label.grid(row=3, column=0, padx=10, pady=10)
+        # --------  input area
+        channel_entry_text = ctk.CTkEntry(self.channel_frame)
+        channel_entry_text.grid(row=4, column=0, padx=10, pady=10)
+        channel_entry_text.configure(fg_color=FG_COLOR, border_width=2, border_color=BORDER_COLOR)
+        # -------- create channel button---------------------------------------------------------------------------------
+        self.button_create_channel = ctk.CTkButton(self.channel_frame, text="Valider le channel", command=create_channel)
+        self.button_create_channel.grid(row=5, column=0, padx=20, pady=20, sticky="s")
+
+
+
 
         # ----  OLD MESSAGES FRAME -  ROW 1 and 2  COL 1 and 2
         self.old_message_frame = ScrollableFrame(self, values=[message for message in messages])
