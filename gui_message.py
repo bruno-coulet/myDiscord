@@ -75,12 +75,13 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
         super().__init__(master)
         self.grid_columnconfigure(0, weight=1)
         self.values = values
-        self.configure(fg_color=FG_SECOND_COLOR)
+        self.configure(fg_color=FG_SECOND_COLOR)  # Couleur du texte pour tout le cadre
         # self.checkboxes = []
 
         for i, value in enumerate(self.values):
-            label = ctk.CTkLabel(self, text=value)
+            label = ctk.CTkLabel(self, text=value, text_color=TEXT_COLOR)  # Couleur du texte pour chaque étiquette
             label.grid(row=i+1, column=0, padx=10, pady=(10, 0))
+
 
 
 
@@ -113,7 +114,7 @@ class Message(ctk.CTk):
         # print(f'id de l\'utilisateur : {user_id}')
 
         # ----  TITLE -             ROW 0     -------
-        title_label = ctk.CTkLabel(self, text=f"Bienvenue dans la messagerie {current_user}", font=(TITLE_FONT))
+        title_label = ctk.CTkLabel(self, text=f"Bienvenue dans la messagerie {current_user}", font=(TITLE_FONT), text_color=TEXT_COLOR)
         title_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
         title_label.pack_propagate(False)
 
@@ -123,7 +124,7 @@ class Message(ctk.CTk):
             self.destroy()  # Détruit la fenêtre actuelle
             os.system("python login.py")
 
-        self.button_log_out = ctk.CTkButton(self, text="Se déconnecter", command=log_out)
+        self.button_log_out = ctk.CTkButton(self, text="Se déconnecter", text_color=TEXT_COLOR, command=log_out)
         self.button_log_out.grid(row=0 , column=2, padx=20, pady=20)
 
         # ----  CHANNEL -           ROW 1,2,3,4   COL 0   -------
@@ -137,7 +138,7 @@ class Message(ctk.CTk):
         self.current_channel_frame.grid(row=0, column=0, padx=10, pady=(10, 0))
         self.current_channel_frame.configure(fg_color=FG_SECOND_COLOR)
         # title label               ROW 1.0.0    COL 0
-        current_channel_label = ctk.CTkLabel(self.current_channel_frame, text=f"Channel actuel : {channel_name}", font=SUBTITLE_FONT)
+        current_channel_label = ctk.CTkLabel(self.current_channel_frame, text=f"Channel actuel : {channel_name}", font=SUBTITLE_FONT, text_color=TEXT_COLOR)
         current_channel_label.grid(row=0, column=0, padx=20, pady=20)
         # title value               ROW 1.0.1    COL 0
         current_channel_title = ctk.CTkLabel(self.current_channel_frame, font=FONT, wraplength=200)
@@ -162,14 +163,14 @@ class Message(ctk.CTk):
             print(f'user_id = {user_id}')
 
         
-        new_channel_label = ctk.CTkLabel(self.channel_frame, text="Créez un channel :", font=SUBTITLE_FONT)
+        new_channel_label = ctk.CTkLabel(self.channel_frame, text="Créez un channel :", font=SUBTITLE_FONT, text_color=TEXT_COLOR)
         new_channel_label.grid(row=3, column=0, padx=10, pady=10)
         # --------  input area
         channel_entry_text = ctk.CTkEntry(self.channel_frame)
         channel_entry_text.grid(row=4, column=0, padx=10, pady=10)
         channel_entry_text.configure(fg_color=FG_COLOR, border_width=2, border_color=BORDER_COLOR)
         # -------- create channel button---------------------------------------------------------------------------------
-        self.button_create_channel = ctk.CTkButton(self.channel_frame, text="Valider le channel", command=create_channel)
+        self.button_create_channel = ctk.CTkButton(self.channel_frame, text="Valider le channel", text_color=TEXT_COLOR, command=create_channel)
         self.button_create_channel.grid(row=5, column=0, padx=20, pady=20, sticky="s")
 
 
@@ -189,18 +190,18 @@ class Message(ctk.CTk):
         self.message_frame.configure(fg_color=FG_SECOND_COLOR, border_width=2, border_color=BORDER_COLOR)
 
         # -------- label  -     ROW 3.0    COL 0 and 1    ---
-        new_message_label = ctk.CTkLabel(self.message_frame, text="Nouveau Message.", font=SUBTITLE_FONT)
+        new_message_label = ctk.CTkLabel(self.message_frame, text="Nouveau Message.", text_color=TEXT_COLOR, font=SUBTITLE_FONT)
         new_message_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
         # -------- is text  -   ROW 3.1    COL 0    ---
-        self.checkbox_text_message = ctk.CTkCheckBox(self.message_frame, text="Message texte")
+        self.checkbox_text_message = ctk.CTkCheckBox(self.message_frame, text="Message texte", text_color=TEXT_COLOR)
         self.checkbox_text_message.grid(row=1, column=0, padx=20, pady=(20, 20), sticky="w")
         # -------- is audio  -  ROW 3.1    COL 1    ---
-        self.checkbox_audio_message = ctk.CTkCheckBox(self.message_frame, text="Message audio")
+        self.checkbox_audio_message = ctk.CTkCheckBox(self.message_frame, text="Message audio", text_color=TEXT_COLOR)
         self.checkbox_audio_message.grid(row=1, column=1, padx=20, pady=(20, 20), sticky="w")
         # --------  input area
         entry_text = ctk.CTkEntry(self.message_frame, width=600, height=50,)
         entry_text.grid(row=2, column=0, padx=10, pady=10)
-        entry_text.configure(fg_color=FG_COLOR, border_width=2, border_color=BORDER_COLOR)
+        entry_text.configure(fg_color=FG_COLOR, border_width=2, border_color=BORDER_COLOR, text_color=TEXT_COLOR)
 
         # -------- send message button---------------------------------------------------------------------------------
         def send_message():
@@ -208,7 +209,7 @@ class Message(ctk.CTk):
             modify.createMessage(user_name=current_user, channel_name=channel_name, content=entry_text.get())
             print("send message : ", entry_text.get())
 
-        self.button_send_message = ctk.CTkButton(self.message_frame, text="Publier le message", command=lambda: send_message())
+        self.button_send_message = ctk.CTkButton(self.message_frame, text="Publier le message", text_color=TEXT_COLOR, command=lambda: send_message())
         self.button_send_message.grid(row=3, column=0, padx=20, pady=20)
 
 if __name__ == "__main__":
