@@ -28,7 +28,7 @@ class Login:
         label = ctk.CTkLabel(master=frame, text='Please, Login !', text_color=TEXT_COLOR, font=SUBTITLE_FONT)
         label.pack(pady=12, padx=10)
 
-        self.user_entry = ctk.CTkEntry(master=frame, placeholder_text="Name", fg_color=FG_TEXT_FIELD,
+        self.user_entry = ctk.CTkEntry(master=frame, placeholder_text="Nickname", fg_color=FG_TEXT_FIELD,
                                         text_color=TEXT_COLOR, border_color=BORDER_COLOR,
                                         placeholder_text_color=TEXT_COLOR, font=FONT, width=250)
         self.user_entry.pack(pady=12, padx=10)
@@ -52,7 +52,7 @@ class Login:
         create_account_label.bind("<Button-1>", lambda event: self.open_create_account())
 
     def user_login(self):
-        name = self.user_entry.get()
+        nickname = self.user_entry.get()
         password = self.user_password.get()
         try:
             conn = mariadb.connect(
@@ -63,13 +63,13 @@ class Login:
                 database=db_name
             )
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM users WHERE name = %s AND password = %s", (name, password))
+            cursor.execute("SELECT * FROM users WHERE nickname = %s AND pwd = %s", (nickname, password))
             row = cursor.fetchone()
             if row:
                 tkmb.showinfo(title="Login Successful", message="You have logged in successfully")
-                self.open_gui_message(name)
+                self.open_gui_message(nickname)
             else:
-                tkmb.showerror(title="Login Failed", message="Invalid name and Password")
+                tkmb.showerror(title="Login Failed", message="Invalid nickname and Password")
         except mariadb.Error as e:
             print(f"Error connecting to MariaDB Platform: {e}")
         finally:
