@@ -33,10 +33,16 @@ class Login:
                                         placeholder_text_color=TEXT_COLOR, font=FONT, width=250)
         self.user_entry.pack(pady=12, padx=10)
         
-        self.user_password = ctk.CTkEntry(master=frame, placeholder_text="Password", fg_color=FG_TEXT_FIELD,
+        self.user_login_password = ctk.CTkEntry(master=frame, placeholder_text="Password", fg_color=FG_TEXT_FIELD,
                                            text_color=TEXT_COLOR, border_color=BORDER_COLOR,
                                            placeholder_text_color=TEXT_COLOR, show="*", font=FONT, width=250)
-        self.user_password.pack(pady=12, padx=30)
+        self.user_login_password.pack(pady=12, padx=30)
+
+        # Case à cocher pour afficher le mot de passe
+        self.show_password_var = ctk.IntVar()
+        self.show_password_check = ctk.CTkCheckBox(master=frame, text="Show Password", text_color=TEXT_COLOR, variable=self.show_password_var)
+        self.show_password_check.pack(pady=12, padx=10)
+        self.show_password_var.trace_add("write", self.login_password_visibility)
 
         button_frame = ctk.CTkFrame(master=frame)
         button_frame.pack(pady=12, padx=10)
@@ -51,9 +57,15 @@ class Login:
         create_account_label.grid(row=1, column=2)
         create_account_label.bind("<Button-1>", lambda event: self.open_create_account())
 
+    def login_password_visibility(self, *args):
+        if self.show_password_var.get() == 1:
+            self.user_login_password.configure(show="")
+        else:
+            self.user_login_password.configure(show="*")
+
     def user_login(self):
         nickname = self.user_entry.get()
-        password = self.user_password.get()
+        password = self.user_login_password.get()
         try:
             conn = mariadb.connect(
                 user=db_user,

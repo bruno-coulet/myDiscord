@@ -13,7 +13,7 @@ from lib import hash_pass, check_pass
 import tkinter.messagebox as tkmb
 import customtkinter as ctk
 from constants import *
-from client import Client  
+from client import Client
 
 class CreateAccount:
     def __init__(self, master):
