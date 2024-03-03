@@ -70,12 +70,20 @@ class Modify:
         self.message.delete(id_message)
 
 
-    def createChannel(self, creator_id, channel_name):
+    def createChannel(self, current_user, creator_id, channel_name):
+        # Extraire les noms des channels de la liste
+        channels = [channel[0] for channel in channels_list]
+
         if channel_name in channels:
             print("Ce channel existe déjà. Veuillez choisir un autre nom.")
             return
-
         self.channel.create(creator_id, channel_name)
+        print(f"Création du channel : {channel_name} par l'utilisateur {current_user}, id : {creator_id[0]}. Bravo Bruno, ce n'était pas facile !")
+
+
+
+
+
 
 
     def updateChannel(self, id, id_channel):
