@@ -43,10 +43,6 @@ class Channel:
          print("Utilisateur non trouvé.")
 
 
-
-
-
-
    def read(self):
        query = f'SELECT * FROM {self.table}'
        return self.db.fetch(query)

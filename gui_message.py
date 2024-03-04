@@ -45,29 +45,6 @@ current_user = sys.argv[1] if len(sys.argv) > 1 else "Unknown User"
 # Extrait le nom d'utilisateur à partir de l'argument en ligne de commande
 current_user = current_user.strip()
 
-# Récupère les données depuis la BDD
-# messages = []  # Modifier pour récupérer les messages depuis la BDD
-# channel_name = "General"  # Modifier pour récupérer le nom du canal depuis la BDD
-
-
-
-
-
-
-# SERVIRA PEUT ETRE UN JOUR CHOISIR LE MODE AUDIO
-# def checkbox_callback(self):
-#     print("checked checkboxes:")
-
-#     # def get(self):
-#     #     checked_checkboxes = []
-#     #     for checkbox in self.checkboxes:
-#     #         if checkbox.get() == 1:
-#     #             checked_checkboxes.append(checkbox.cget("text"))
-#     #     return checked_checkboxes 
-
-
-
-
 
 """ affiche les messages existants   """   
 class ScrollableFrame(ctk.CTkScrollableFrame):
@@ -82,8 +59,6 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
         for i, value in enumerate(self.values):
             label = ctk.CTkLabel(self, text=value, text_color=TEXT_COLOR)  # Couleur du texte pour chaque étiquette
             label.grid(row=i+1, column=0, padx=10, pady=(10, 0))
-
-
 
 
 class Message(ctk.CTk):
@@ -121,6 +96,7 @@ class Message(ctk.CTk):
 
         # ----  LOGOUT       -      ROW 0 COL 2   ---
         def log_out():
+
             print("log out")
             self.destroy()  # Détruit la fenêtre actuelle
             os.system("python login.py")
@@ -170,9 +146,6 @@ class Message(ctk.CTk):
                 tkmb.showinfo(title="Channel Created", message="Channel created successfully")
             else:
                 tkmb.showerror(title="Error", message="User not found")
-
-
-
         
         new_channel_label = ctk.CTkLabel(self.channel_frame, text="Créez un channel :", font=SUBTITLE_FONT, text_color=TEXT_COLOR)
         new_channel_label.grid(row=3, column=0, padx=10, pady=10)
