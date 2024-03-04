@@ -39,32 +39,11 @@ modify=Modify()
 # liste de tuples, chacun contient un seul élément : le contenu d'un message.
 messages = db.query("SELECT content FROM message")
 
-
 # Charge le nom d'utilisateur passé en argument en ligne de commande sinon utilisateur inconnu
 current_user = sys.argv[1] if len(sys.argv) > 1 else "Unknown User"
 
 # Extrait le nom d'utilisateur à partir de l'argument en ligne de commande
 current_user = current_user.strip()
-
-
-
-
-
-
-
-
-# SERVIRA PEUT ETRE UN JOUR CHOISIR LE MODE AUDIO
-# def checkbox_callback(self):
-#     print("checked checkboxes:")
-
-#     # def get(self):
-#     #     checked_checkboxes = []
-#     #     for checkbox in self.checkboxes:
-#     #         if checkbox.get() == 1:
-#     #             checked_checkboxes.append(checkbox.cget("text"))
-#     #     return checked_checkboxes 
-
-
 
 
 
@@ -76,14 +55,13 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
         self.grid_columnconfigure(0, weight=1)
         self.values = values
         self.configure(fg_color=FG_SECOND_COLOR)
-        # self.checkboxes = []
 
         for i, value in enumerate(self.values):
             message_content = value[0]  # Accéder au premier élément du tuple, sinon cela affiche les messages entre accolades
             label = ctk.CTkLabel(self, text=message_content, text_color=TEXT_COLOR)  # Couleur du texte pour chaque étiquette
             label.grid(row=i+1, column=0, padx=10, pady=(10, 0))
 
-    def update_messages(self, new_messages):
+    def update_channel_messages(self, new_messages):
         # Efface tous les messages actuellement affichés
         for widget in self.winfo_children():
             widget.destroy()
@@ -93,6 +71,9 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
             message_content = value[0]
             label = ctk.CTkLabel(self, text=message_content, text_color=TEXT_COLOR)
             label.grid(row=i+1, column=0, padx=10, pady=(10, 0))
+
+
+
 
 
 class Message(ctk.CTk):
@@ -108,8 +89,6 @@ class Message(ctk.CTk):
 
         # DATA POUR LE TREEVIEW
         channels_data = db.query("SELECT c.channel_name, u.firstname FROM channel c LEFT JOIN channel_user cu ON c.id = cu.channel_id LEFT JOIN users u ON cu.user_id = u.id")
-
-        # Dictionnaire pour stocker les canaux et les utilisateurs
         channels_user  = {}
         for channel_name, user_name in channels_data:  
             if channel_name not in channels_user :
@@ -122,12 +101,16 @@ class Message(ctk.CTk):
         print(f'nom du channel actuel : {channel_name}')
 
 
-        # ----  TITLE -             ROW 0     -------
+        # Définir l'attribut self.current_channel_name
+        self.current_channel_name = None
+        # Définir l'attribut self.current_channel
+        self.current_channel = None
+
+
         title_label = ctk.CTkLabel(self, text=f"Bienvenue dans la messagerie {current_user}", font=(TITLE_FONT), text_color=TEXT_COLOR)
         title_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
         title_label.pack_propagate(False)
 
-        # ----  LOGOUT       -      ROW 0 COL 2   ---
         def log_out():
 
             print("log out")
@@ -137,25 +120,24 @@ class Message(ctk.CTk):
         self.button_log_out = ctk.CTkButton(self, text="Se déconnecter", text_color=TEXT_COLOR, command=log_out)
         self.button_log_out.grid(row=0 , column=2, padx=20, pady=20)
 
-        # ----  CHANNEL -           ROW 1,2,3,4   COL 0   -------
+
         self.channel_frame = ctk.CTkFrame(self)
         self.channel_frame.grid(row=1, column=0, padx=10, pady=(10, 0), sticky="ns", rowspan=4)
         self.channel_frame.grid_columnconfigure((0, 1), weight=1)
         self.channel_frame.configure(fg_color=FG_COLOR, border_width=2, border_color=BORDER_COLOR)
 
-        # ----  CHANNEL / CURRENT - ROW 1.0  COL 0   ---
+
         self.current_channel_frame = ctk.CTkFrame(self.channel_frame)
         self.current_channel_frame.grid(row=0, column=0, padx=10, pady=(10, 0))
         self.current_channel_frame.configure(fg_color=FG_SECOND_COLOR)
-        # title label               ROW 1.0.0    COL 0
+
         current_channel_label = ctk.CTkLabel(self.current_channel_frame, text=f"Channel actuel : {channel_name}", font=SUBTITLE_FONT, text_color=TEXT_COLOR)
         current_channel_label.grid(row=0, column=0, padx=20, pady=20)
-        # title value               ROW 1.0.1    COL 0
+
         current_channel_title = ctk.CTkLabel(self.current_channel_frame, font=FONT, wraplength=200)
         current_channel_title.grid(row=1, column=0, padx=20, pady=20)
 
-        # ----  CHANNEL / TREEVIEW  -  ROW 1.1 and 1.3    COL 0
-        # Création du Treeview pour afficher les channels
+
         self.channel_tree = ttk.Treeview(self.current_channel_frame)
         self.channel_tree.heading("#0", text="Autre channels")
         self.channel_tree.grid(row=1, column=0, padx=10, pady=10, sticky="nsew", rowspan=3)
@@ -163,27 +145,29 @@ class Message(ctk.CTk):
 
         # Gestionnaire d'événements pour le TreeView
         def select_channel(event):
-            # Récupère l'élément sélectionné dans le TreeView
             selected_item = self.channel_tree.selection()
             if selected_item:
-            # Récupère le nom du canal sélectionné
-             channel_name = self.channel_tree.item(selected_item, "text")
-            # Met à jour les messages affichés en fonction du canal sélectionné
-             update_messages(channel_name)
+                self.current_channel = self.channel_tree.item(selected_item, "text")
+                update_channel_messages(self.current_channel)
+                # Mettre à jour le nom du channel en fonction du channel sélectionné
+                current_channel_label.configure(text=f"Channel actuel : {self.current_channel}")
+
+
+
 
         # Met à jour les messages en fonction du canal sélectionné
-        def update_messages(channel_name):
-            # Exécutez une requête SQL pour récupérer les messages correspondant au canal sélectionné
+        def update_channel_messages(channel_name):
             messages = db.query(f"SELECT content FROM message WHERE channel_name = '{channel_name}'")
-            # Met à jour l'affichage des messages dans la fenêtre principale
-            self.old_message_frame.update_messages(messages)
+            self.old_message_frame.update_channel_messages(messages)
+
+
+
+
+
+
 
         # Associez le gestionnaire d'événements au TreeView
         self.channel_tree.bind("<<TreeviewSelect>>", select_channel)
-
-
-
-
         # Ajouter des canaux au treeview
         for channel_name, users in channels_user.items():
             self.channel_tree.insert("", "end", text=channel_name)
@@ -196,7 +180,6 @@ class Message(ctk.CTk):
             creator_id_query = f"SELECT id FROM users WHERE nickname = '{current_user}'"
             result = db.query(creator_id_query)  # Utilise query pour obtenir un seul résultat
             print(f"current_user : {current_user}")
-
 
             if result:
                 creator_id = result[0]  # Si un résultat est trouvé, récupère l'user_id
@@ -216,6 +199,13 @@ class Message(ctk.CTk):
         self.button_create_channel = ctk.CTkButton(self.channel_frame, text="Valider le channel", text_color=TEXT_COLOR, command=create_channel)
         self.button_create_channel.grid(row=5, column=0, padx=20, pady=20, sticky="s")
 
+
+        def update_messages(self):
+            # Exécutez une requête SQL pour récupérer les messages correspondant au canal actuel
+            channel_name = self.current_channel_name  # Suppose que vous avez un attribut pour stocker le nom du canal actuel
+            messages = db.query(f"SELECT content FROM message WHERE channel_name = '{channel_name}'")
+            # Met à jour l'affichage des messages dans la fenêtre principale
+            self.old_message_frame.update_channel_messages(messages)
 
 
 
@@ -250,8 +240,15 @@ class Message(ctk.CTk):
         def send_message():
             req = "SELECT channel.channel_name, message.channel_name FROM `channel`, `message` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
             # req = "SELECT channel.channel_name, message.channel_name FROM channel JOIN message ON message.channel_name = channel.channel_name LIMIT 0, 50;"
-            modify.createMessage(user_name=current_user, channel_name=channel_name, content=entry_text.get())
-            print("send message : ", entry_text.get())
+            # modify.createMessage(user_name=current_user, channel_name=channel_name, content=entry_text.get())
+            # print("send message : ", entry_text.get())
+            modify.createMessage(user_name=current_user, channel_name=self.current_channel, content=entry_text.get())
+            print("Message envoyé:", entry_text.get())
+            # Rafraîchir l'affichage des messages après l'envoi d'un nouveau message
+            # self.update_messages()
+            update_channel_messages(self.current_channel)
+
+        
 
         self.button_send_message = ctk.CTkButton(self.message_frame, text="Publier le message", text_color=TEXT_COLOR, command=lambda: send_message())
         self.button_send_message.grid(row=3, column=0, padx=20, pady=20)
