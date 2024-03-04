@@ -29,6 +29,7 @@ from db import Db
 import tkinter.messagebox as tkmb
 import sys
 import os
+import time
 
 # from update import Update
 
@@ -38,10 +39,8 @@ modify=Modify()
 """ récupère les DATA depuis la BDD"""
 # liste de tuples, chacun contient un seul élément : le contenu d'un message.
 messages = db.query("SELECT content FROM message")
-
 # Charge le nom d'utilisateur passé en argument en ligne de commande sinon utilisateur inconnu
 current_user = sys.argv[1] if len(sys.argv) > 1 else "Unknown User"
-
 # Extrait le nom d'utilisateur à partir de l'argument en ligne de commande
 current_user = current_user.strip()
 
@@ -65,7 +64,6 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
         # Efface tous les messages actuellement affichés
         for widget in self.winfo_children():
             widget.destroy()
-
         # Affiche les nouveaux messages
         for i, value in enumerate(new_messages):
             message_content = value[0]
@@ -147,15 +145,17 @@ class Message(ctk.CTk):
             selected_item = self.channel_tree.selection()
             if selected_item:
                 self.current_channel = self.channel_tree.item(selected_item, "text")
-                update_channel_messages(self.current_channel)
-                # Mettre à jour le nom du channel en fonction du channel sélectionné
+                # Met à jour les messages en fonction du channel
+                sort_messages(self.current_channel)
+                # Met à jour le nom du channel en fonction du channel sélectionné
                 current_channel_label.configure(text=f"Channel actuel : {self.current_channel}")
+                print(f"channel sélectionné : {self.current_channel}")
 
 
 
 
-        # Met à jour les messages en fonction du canal sélectionné
-        def update_channel_messages(channel_name):
+        # Met à jour les messages en fonction du channel
+        def sort_messages(channel_name):
             messages = db.query(f"SELECT content FROM message WHERE channel_name = '{channel_name}'")
             self.old_message_frame.update_channel_messages(messages)
 
@@ -202,14 +202,6 @@ class Message(ctk.CTk):
         self.button_create_channel.grid(row=5, column=0, padx=20, pady=20, sticky="s")
 
 
-        def update_messages(self):
-            # Exécutez une requête SQL pour récupérer les messages correspondant au canal actuel
-            channel_name = self.current_channel_name  # Suppose que vous avez un attribut pour stocker le nom du canal actuel
-            messages = db.query(f"SELECT content FROM message WHERE channel_name = '{channel_name}'")
-            # Met à jour l'affichage des messages dans la fenêtre principale
-            self.old_message_frame.update_channel_messages(messages)
-
-
 
         # ----  OLD MESSAGES FRAME -  ROW 1 and 2  COL 1 and 2
         self.old_message_frame = ScrollableFrame(self, values=[message for message in messages])
@@ -241,14 +233,11 @@ class Message(ctk.CTk):
         # -------- send message button---------------------------------------------------------------------------------
         def send_message():
             req = "SELECT channel.channel_name, message.channel_name FROM `channel`, `message` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
-            # req = "SELECT channel.channel_name, message.channel_name FROM channel JOIN message ON message.channel_name = channel.channel_name LIMIT 0, 50;"
-            # modify.createMessage(user_name=current_user, channel_name=channel_name, content=entry_text.get())
-            # print("send message : ", entry_text.get())
             modify.createMessage(user_name=current_user, channel_name=self.current_channel, content=entry_text.get())
             print("Message envoyé:", entry_text.get())
-            # Rafraîchir l'affichage des messages après l'envoi d'un nouveau message
-            # self.update_messages()
-            update_channel_messages(self.current_channel)
+            print(f"dans le channnel: {self.current_channel}")
+
+
 
         
 
