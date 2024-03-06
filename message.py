@@ -3,20 +3,13 @@ from db import Db
 
 class Message:
    def __init__(self):
-       self.table = 'message'
-       self.db = Db()
+      self.table = 'message'
+      self.db = Db()
 
 
    def create(self, user_name, channel_name, content):
       query = f'INSERT INTO {self.table}(user_name, channel_name, content) VALUES (\'{user_name}\', \'{channel_name}\', \'{content}\')'
       self.db.query(query, mod=True)
-
-
-   # def create(self, user_name, channel_name, content):
-   #    query = 'INSERT INTO {} (user_name, channel_name, content) VALUES (%s, %s, %s)'.format(self.table)
-   #    values = (user_name, channel_name, content)
-   #    self.db.query(query, values)
-
 
 
    def read(self):
@@ -41,3 +34,7 @@ class Message:
       params = (id,)
       return self.db.fetch(query, params)
 
+if __name__ == "__main__":
+   message = Message()
+   
+   

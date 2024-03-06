@@ -48,7 +48,7 @@ class Db:
         except mariadb.Error as err:
             print(f"Error connecting to the database: {err}")
 
-    def query(self, req, mod=False):
+    def query(self, req,value=None, mod=False):
         """
         Query the database
         :param req: request sql injection string
@@ -56,7 +56,7 @@ class Db:
         :return: None | list
         """
         try:
-            self.cursor.execute(req)
+            self.cursor.execute(req,value)
             if mod:
                 self.base.commit()
             else:
@@ -84,3 +84,8 @@ if __name__ == '__main__':
     print(db.query("SHOW TABLES"))
     print(type(db.base), type(db.cursor))
     db.disconnect()
+
+    # TEST TEMPORAIRE
+    # channel = ("légumes",)
+    # print(db.query("select content from message where channel_name = %s",channel))
+    

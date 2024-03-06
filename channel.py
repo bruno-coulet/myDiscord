@@ -19,24 +19,21 @@ class Channel:
        self.table = 'channel'
        self.db = Db()
 
-
-
-   # def create(self, creator_id, channel_name):
-   #      query = f'INSERT INTO {self.table}(user_name, channel_name) VALUES (\'{creator_id}\', \'{channel_name}\')'
-   #      self.db.query(query, modif=True)
        
    def create(self, creator_id, channel_name):
-      # Récupérer les informations de l'utilisateur à partir de son ID
-      user_query = f'SELECT first_name, name FROM users WHERE id = {creator_id}'
+      user_query = f'SELECT firstname, lastname FROM users WHERE id = {creator_id}'
       user_result = self.db.query(user_query)
 
       if user_result:
-         # Extraire les informations de l'utilisateur
-         first_name = user_result[0][0]
-         name = user_result[0][1]
-         # Construire la requête d'insertion en utilisant les informations de l'utilisateur
-         query = f"INSERT INTO {self.table}(channel_name, creator_name) VALUES ('{channel_name}', '{first_name} {name}')"
-         self.db.query(query, modif=True)
+        firstname = user_result[0][0]
+        lastname = user_result[0][1]
+        query = f"INSERT INTO {self.table}(channel_name, creator_name) VALUES (%s, %s)"
+        params = (channel_name, f"{firstname} {lastname}")
+        print("Query:", query)
+        print("Params:", params)
+
+        self.db.query(query, params=params, modif=True)
+
       else:
          print("Utilisateur non trouvé.")
 

@@ -64,17 +64,31 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
         # Efface tous les messages actuellement affichés
         for widget in self.winfo_children():
             widget.destroy()
+        # print(f"new message :{new_messages}")
         # Affiche les nouveaux messages
         for i, value in enumerate(new_messages):
-            message_content = value[0]
+            # message_content = value[0]
+            # print(f'la valeur !!!!!!! {value}')
+            message_content = value
+
             label = ctk.CTkLabel(self, text=message_content, text_color=TEXT_COLOR)
             label.grid(row=i+1, column=0, padx=10, pady=(10, 0))
-
+        print(f'message_content :{message_content}')
 
 
 
 
 class Message(ctk.CTk):
+
+    def update_messages(self):
+        channel = self.current_channel
+        
+        # messages = db.query("SELECT content FROM message WHERE channel_name ={channel_name}")
+        
+        messages = db.query("SELECT content FROM message WHERE channel_name = %s",(channel,))
+        print(f'LA !!!!!!!!!!!!!!!! : {messages}')
+        # Met à jour l'affichage des messages dans la fenêtre principale
+        self.old_message_frame.update_channel_messages(messages)
 
     def __init__(self):
         super().__init__()
@@ -103,7 +117,6 @@ class Message(ctk.CTk):
         self.current_channel_name = None
         # Définir l'attribut self.current_channel
         self.current_channel = None
-
 
         title_label = ctk.CTkLabel(self, text=f"Bienvenue dans la messagerie {current_user}", font=(TITLE_FONT), text_color=TEXT_COLOR)
         title_label.grid(row=0, column=0, padx=10, pady=10, sticky="ew", columnspan=2)
@@ -152,17 +165,10 @@ class Message(ctk.CTk):
                 print(f"channel sélectionné : {self.current_channel}")
 
 
-
-
         # Met à jour les messages en fonction du channel
         def sort_messages(channel_name):
             messages = db.query(f"SELECT content FROM message WHERE channel_name = '{channel_name}'")
             self.old_message_frame.update_channel_messages(messages)
-
-
-
-
-
 
 
         # Associez le gestionnaire d'événements au TreeView
@@ -174,10 +180,9 @@ class Message(ctk.CTk):
 
         # ----  CHANNEL / CREATE    ROW 1.5  COL 0
         def create_channel():
-            new_channel_name = channel_entry_text.get()  # Récupère le texte entré dans entry_text
-            # Recherche de l'user_id du créateur dans la base de données
+            new_channel_name = channel_entry_text.get()
             creator_id_query = f"SELECT id FROM users WHERE nickname = '{current_user}'"
-            result = db.query(creator_id_query)  # Utilise query pour obtenir un seul résultat
+            result = db.query(creator_id_query)
             print(f"current_user : {current_user}")
 
             if result:
@@ -209,6 +214,29 @@ class Message(ctk.CTk):
         self.old_message_frame.configure(fg_color=FG_SECOND_COLOR, border_width=2, border_color=BORDER_COLOR)
         self.old_message_frame.pack_propagate(False)
 
+        
+        # # Définir une méthode pour actualiser les messages toutes les secondes
+        # def schedule_update():
+        #     self.update_messages() 
+        #     self.after(2000, schedule_update)
+        # def schedule_update(gui_message):
+        #     # Récupérer les nouveaux messages depuis la base de données
+        #     messages = db.query("SELECT content FROM message")
+        #     # Mettre à jour l'affichage des messages dans la fenêtre principale
+        #     gui_message.old_message_frame.update_channel_messages(messages)
+        #     # Planifier la prochaine actualisation après 2000 millisecondes (2 secondes)
+        #     gui_message.after(2000, schedule_update, gui_message)
+
+        # # Lancer le premier appel à la fonction d'actualisation
+        # schedule_update(gui_message)    
+   
+
+
+
+
+
+
+
         # ----  NEW MESSAGE FRAME  - ROW 3    COL 1 and 2    ---
         self.message_frame = ctk.CTkFrame(self)
         self.message_frame.grid(row=3, column=1, padx=10, pady=(10, 0), sticky="ew", columnspan=2, rowspan=2)
@@ -232,14 +260,13 @@ class Message(ctk.CTk):
 
         # -------- send message button---------------------------------------------------------------------------------
         def send_message():
-            req = "SELECT channel.channel_name, message.channel_name FROM `channel`, `message` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
+            # req = "SELECT channel.channel_name, message.channel_name FROM `channel`, `message` WHERE message.channel_name = channel.channel_name LIMIT 0,50;"
             modify.createMessage(user_name=current_user, channel_name=self.current_channel, content=entry_text.get())
             print("Message envoyé:", entry_text.get())
-            print(f"dans le channnel: {self.current_channel}")
-
-
-
-        
+            
+            print(f"dans le channel: {self.current_channel}")
+            # Rafraîchir l'affichage des messages après l'envoi d'un nouveau message
+            self.update_messages()        
 
         self.button_send_message = ctk.CTkButton(self.message_frame, text="Publier le message", text_color=TEXT_COLOR, command=lambda: send_message())
         self.button_send_message.grid(row=3, column=0, padx=20, pady=20)

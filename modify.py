@@ -16,7 +16,7 @@ Il appelle à son tour, soit le module message.py, soit user.py, soit channel.py
 Ces modules utilise leur méthodes propres (avec du sql) et font appel a db.py"""
 
 from message import Message
-from channel import Channel
+# from channel import Channel
 from user import User
 from db import Db
 
@@ -38,7 +38,7 @@ for channel_name, user_name in channels_list:
 class Modify:
     def __init__(self):
         self.message = Message()
-        self.channel = Channel()
+        # self.channel = Channel()
         self.user = User()
         self.db = Db()
 
@@ -69,6 +69,22 @@ class Modify:
 
         self.message.delete(id_message)
 
+    def create(self, creator_id, channel_name):
+        user_query = f'SELECT firstname, lastname FROM users WHERE id = {creator_id}'
+        user_result = self.db.query(user_query)
+
+        if user_result:
+            firstname = user_result[0][0]
+            lastname = user_result[0][1]
+            query = f"INSERT INTO {self.table}(channel_name, creator_name) VALUES (%s, %s)"
+            params = (channel_name, f"{firstname} {lastname}")
+            print("Query:", query)
+            print("Params:", params)
+
+            self.db.query(query, params=params, modif=True)
+
+        else:
+            print("Utilisateur non trouvé.")
 
     def createChannel(self, current_user, creator_id, channel_name):
         # Extraire les noms des channels de la liste
@@ -77,7 +93,7 @@ class Modify:
         if channel_name in channels:
             print("Ce channel existe déjà. Veuillez choisir un autre nom.")
             return
-        self.channel.create(creator_id, channel_name)
+        self.create(creator_id, channel_name)
         print(f"Création du channel : {channel_name} par l'utilisateur {current_user}, id : {creator_id[0]}. Bravo Bruno, ce n'était pas facile !")
 
 
