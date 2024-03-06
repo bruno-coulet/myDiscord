@@ -40,7 +40,8 @@ class Db:
                     user=self.__user,
                     password=self.__pw,
                     port=self.__port,
-                    database=self.__database,
+                    database='test',
+                    # database=self.__database,
                     autocommit=False
                     )
             self.cursor = self.base.cursor()

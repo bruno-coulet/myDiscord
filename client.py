@@ -28,6 +28,12 @@ class Client:
         self.rooms = []
         self.messages = []
 
+    def set_id_connect(self, id_connect):
+        self.__id_connect = id_connect
+
+    def set_uuid(self, uuid):
+        self.__uuid = uuid
+
     def get_state(self):
         """
         Returns the current state of the connected client
@@ -53,7 +59,7 @@ class Client:
             self.__state_connect = False
         else:
             self.__state_connect = True
-            self.__uuid = str(uuid.uuid4())
+            self.__db.connect()
 
     def get_id(self):
         """
