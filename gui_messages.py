@@ -11,6 +11,7 @@
 """
 import tkinter.messagebox as tkmb
 from client import Client
+from audio import *
 from constants import *
 
 
@@ -78,14 +79,14 @@ class GuiMessages(Client, ctk.CTk):
             updated_text = f"{current_text}\n{self.current_user}: {message}"
             self.message_display.configure(text=updated_text)
             self.user_entry.delete(0, 'end')
-        else:
-            tkmb.showwarning("Empty Message", "Please enter a message before sending.")
 
     def send_audio_message(self):
         """
         Send audio
         :return: Not implemented
         """
+        records = record(5)
+        play(records)
         tkmb.showinfo("Audio Message", "Audio message functionality not implemented yet.")
 
     def start(self):
