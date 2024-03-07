@@ -34,9 +34,9 @@ class GuiMessages(Client, ctk.CTk):
         Creates the GUI message box
         :return:
         """
-        frame = ctk.CTkFrame(master=self)
+        frame = ctk.CTkFrame(master=self, width=800, height=600)
         frame.configure(fg_color=FG_SECOND_COLOR, border_width=2, border_color=BORDER_COLOR, bg_color=FG_COLOR)
-        frame.pack(pady=50, padx=200, fill='both', expand=True)
+        frame.pack(pady=10, padx=10, fill='both', expand=True)
 
         self.label_text = f'Room: {self.channel_name}'
         label = ctk.CTkLabel(master=frame, text=self.label_text, text_color=TEXT_COLOR, bg_color=FG_SECOND_COLOR,
@@ -60,12 +60,11 @@ class GuiMessages(Client, ctk.CTk):
                                   placeholder_text_color=TEXT_COLOR, bg_color=FG_SECOND_COLOR, font=FONT, width=60)
         self.user_entry.pack(side='left', padx=5, fill='x', expand=True)
 
-        send_button = ctk.CTkButton(master=frame, text="SEND", font=FONT, bg_color=FG_SECOND_COLOR,
-                                    fg_color=FG_SECOND_COLOR, command=self.send_message)
+        send_button = ctk.CTkButton(master=frame, text="SEND", text_color=TEXT_COLOR, command=self.send_message)
         send_button.pack(pady=5, padx=10)
 
-        audio_button = ctk.CTkButton(master=frame, text="Audio Message", font=FONT, bg_color=FG_SECOND_COLOR,
-                                     fg_color=FG_SECOND_COLOR, command=self.send_audio_message)
+        audio_button = ctk.CTkButton(master=frame, text="Audio Message", text_color=TEXT_COLOR,
+                                     command=self.send_audio_message)
         audio_button.pack(pady=5, padx=10)
 
     def send_message(self):
