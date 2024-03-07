@@ -20,60 +20,72 @@ class Client:
     Client class
     """
     def __init__(self):
-        self.__db = Db()
-        self.__state_connect = False
-        self.__id_connect = None
-        self.__uuid = str(uuid.uuid4())
-        self.__channel_name = 'Default'
+        self.db = Db()
+        self.db.connect()
+        self.state_connect = False
+        self.id_connect = None
+        self.uuid = str(uuid.uuid4())
+        self.channel_name = 'Default'
         self.rooms = []
         self.messages = []
 
-    def set_id_connect(self, id_connect):
-        self.__id_connect = id_connect
+    def set_id(self, id_connect):
+        """
+        Sets the id
+        :param id_connect:
+        :return:
+        """
+        self.id_connect = id_connect
 
     def set_uuid(self, uuid):
-        self.__uuid = uuid
+        """
+        Sets the uuid
+        :param uuid:
+        :return:
+        """
+        self.uuid = uuid
 
     def get_state(self):
         """
         Returns the current state of the connected client
         :return: Bool True if the client is connected, False otherwise
         """
-        return self.__state_connect
+        return self.state_connect
 
     def get_channels(self):
         """
         Returns a list of channels in the database
         :return: List of channels in the database
         """
-        if self.__state_connect:
+        if self.state_connect:
             req = "SELECT id, name, type FROM rooms"
-            return self.__db.query(req)
+            return self.db.query(req)
 
     def change_state_connect(self):
         """
         Change the state connection of the client
         :return: None
         """
-        if self.__state_connect:
-            self.__state_connect = False
+        if self.state_connect:
+            self.state_connect = False
+            self.db.disconnect()
         else:
-            self.__state_connect = True
-            self.__db.connect()
+            self.state_connect = True
+            self.db.connect()
 
     def get_id(self):
         """
         Returns the id of the user in the database
         :return: int id of the user in the database
         """
-        return self.__id_connect
+        return self.id_connect
 
     def get_uuid(self):
         """
         returns the uuid of the client.
         :return: str uuid
         """
-        return self.__uuid
+        return self.uuid
 
     def register(self, firstname, lastname, email, password, nickname="Anonymous"):
         """
@@ -86,10 +98,8 @@ class Client:
         :return: None
         """
         hash_password = hash_pass(password)
-        self.__db.connect()
         req = f"INSERT INTO users(firstname, lastname, email, pwd, nickname) VALUE (\'{firstname}\', \'{lastname}\', \'{email}\', \"{hash_password}\", \'{nickname}\')"
-        self.__db.query(req, mod=True)
-        self.__db.disconnect()
+        self.db.query(req, mod=True)
 
     def change_email(self, email):
         """
@@ -97,8 +107,9 @@ class Client:
         :param email: new email address of the user
         :return: None
         """
+        self.db.connect()
         req = f"UPDATE users SET email = \'{email}\' where id = {self.get_id()}"
-        self.__db.query(req, mod=True)
+        self.db.query(req, mod=True)
 
     def change_password(self, password):
         """
@@ -107,7 +118,7 @@ class Client:
         :return: None
         """
         req = f"UPDATE users SET password = \'{hash_pass(password)}\' where id = {self.get_id()}"
-        self.__db.query(req, mod=True)
+        self.db.query(req, mod=True)
 
     def change_nickname(self, nickname):
         """
@@ -116,7 +127,15 @@ class Client:
         :return: None
         """
         req = f"UPDATE users SET nickname = \'{nickname}\' where id = {self.get_id()}"
-        self.__db.query(req, mod=True)
+        self.db.query(req, mod=True)
+
+    def get_nickname(self):
+        """
+        Get the Nickname of the user
+        :return: None
+        """
+        req = f"SELECT nickname FROM users WHERE id = {self.get_id()}"
+        return self.db.query(req)
 
     def connect(self, email, password):
         """
@@ -125,21 +144,21 @@ class Client:
         :param password: password of the user
         :return:  none
         """
-        self.__db.connect()
+        self.db.connect()
         req = f"SELECT `pwd`, `id` FROM users WHERE `email` = \'{email}\'"
-        response = self.__db.query(req)
+        response = self.db.query(req)
         if response:
             if check_pass(password, response[0][0][2:-1]):
                 self.change_state_connect()
-                self.__id_connect = response[0][1]
+                self.id_connect = response[0][1]
                 req = f"INSERT INTO connexions(id_user, uuid_client, connect) VALUES (\'{self.get_id()}\', \'{self.get_uuid()}\', TRUE)"
-                self.__db.query(req, mod=True)
+                self.db.query(req, mod=True)
             else:
                 print("Wrong password")
-                self.__state_connect = False
+                self.state_connect = False
         else:
             print("Wrong login")
-            self.__state_connect = False
+            self.state_connect = False
 
     def logout(self):
         """
@@ -148,9 +167,8 @@ class Client:
         """
         if self.get_state():
             req = f"UPDATE connexions SET connexions.connect = FALSE WHERE id_user = {self.get_id()} AND uuid_client = \'{self.get_uuid()}\'"
-            self.__db.query(req, mod=True)
+            self.db.query(req, mod=True)
             self.change_state_connect()
-            self.__db.disconnect()
 
     def create_room(self, channel):
         """
@@ -204,14 +222,14 @@ class Client:
         :param room_name: string room_name
         :return: list of messages
         """
-        if self.__state_connect:
+        if self.state_connect:
             req = f"SELECT type FROM {room_name}_rooms WHERE name = '{room_name}'"
-            if self.__db.query(req) == 'Public':
+            if self.db.query(req) == 'Public':
                 req = f"SELECT * FROM {room_name}_room WHERE date = DAY(NOW())"
-                self.__db.query(req)
+                self.db.query(req)
             else:
                 req = f"SELECT * FROM {room_name}"
-            return self.__db.query(req)
+            return self.db.query(req)
 
     def command(self, action: str):
         """
@@ -226,7 +244,7 @@ class Client:
         'USERS'
         :return: List | None
         """
-        if self.__state_connect and action[0] == '!':
+        if self.state_connect and action[0] == '!':
             cmd = action.split(' ')
             cmd.pop(0)
             match cmd[0].lower():
@@ -259,27 +277,27 @@ class Client:
                     req.append(f"CREATE TABLE {cmd[1]}_rights({para_2}) ENGINE = InnoDB;")
                     req.append(f"INSERT INTO {cmd[1]}_rights(id, role, ban) VALUES ({self.get_id()}, 'ADMIN', FALSE);")
                     for k in req:
-                        self.__db.query(k, mod=True)
+                        self.db.query(k, mod=True)
                 case 'join':
-                    if cmd[1] in self.__db.query(f"SELECT name FROM rooms WHERE name = \'{cmd[1]}\'"):
-                        self.__channel_name = cmd[1]
+                    if cmd[1] in self.db.query(f"SELECT name FROM rooms WHERE name = \'{cmd[1]}\'"):
+                        self.channel_name = cmd[1]
                 case 'destroy':
                     req = f"SELECT role FROM {cmd[1]}_rights WHERE id = {self.get_id()}"
-                    if self.__db.query(req)[0][0] == "ADMIN":
+                    if self.db.query(req)[0][0] == "ADMIN":
                         request = list([])
                         request.append(f"DROP TABLE {cmd[1]}_room;")
                         request.append(f"DROP TABLE {cmd[1]}_rights;")
                         request.append(f"DELETE FROM rooms WHERE `name` = \'{cmd[1]}\'")
                         for k in request:
-                            self.__db.query(k, mod=True)
+                            self.db.query(k, mod=True)
                     else:
                         print("No rights found for this action!")
                 case 'rooms':
                     req = f"SELECT * FROM rooms"
-                    return self.__db.query(req)
+                    return self.db.query(req)
                 case 'users':
                     req = f"SELECT * FROM users"
-                    return self.__db.query(req)
+                    return self.db.query(req)
                 case _:
                     return "Invalid command"
 

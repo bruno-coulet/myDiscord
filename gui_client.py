@@ -9,6 +9,7 @@
 @licence: GPLv3
 """
 from client import Client
+
 from constants import *
 
 
@@ -32,6 +33,7 @@ class GuiClient(Client, ctk.CTk):
         The GUI login
         :return: None
         """
+
         pass
 
     def gui_register(self):

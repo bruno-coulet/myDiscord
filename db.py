@@ -76,10 +76,10 @@ class Db:
 if __name__ == '__main__':
     db = Db()
     db.connect()
-    print(db.query("SHOW TABLES"))
-    for k in range(10):
-        print(k)
     print(db.query("SHOW DATABASES"))
     print(db.query("SHOW TABLES"))
-    print(type(db.base), type(db.cursor))
+    print(db.query("DESCRIBE default_room"))
+    print(db.query("DESCRIBE default_rights"))
+    print(db.query("DESCRIBE users"))
+    print(db.query("DESCRIBE connexions"))
     db.disconnect()

@@ -67,7 +67,7 @@ class GuiLogin(Client, ctk.CTk):
 
     def login_password_visibility(self, *args):
         """
-        Checks if the user want to see the password
+        Checks if the user to want to see the password
         :return:
         """
         if self.show_password_var.get() == 1:
@@ -96,14 +96,16 @@ class GuiLogin(Client, ctk.CTk):
         self.connect(email=self.email, password=self.password)
         if self.get_state():
             message = GuiMessages()
-            message.set_id_connect(self.get_id())
+            message.set_id(self.id_connect)
             message.set_uuid(self.get_uuid())
+            print(self.get_nickname())
+            message.current_user = self.get_nickname()[0][0]
             message.change_state_connect()
             self.destroy()
-            message.mainloop()
+            message.start()
         else:
-            self.login_label = ctk.CTkLabel(master=self.frame, text='Bad credentials', bg_color=FG_SECOND_COLOR, font=FONT,
-                                            text_color=TEXT_COLOR, cursor="hand2", padx=10)
+            self.login_label = ctk.CTkLabel(master=self.frame, text='Bad credentials', bg_color=FG_SECOND_COLOR,
+                                            font=FONT, text_color=TEXT_COLOR, cursor="hand2", padx=10)
             self.login_label.pack(pady=12, padx=12)
 
     def start(self):

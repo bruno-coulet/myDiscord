@@ -34,4 +34,3 @@ BORDER_COLOR = "#3E63DD"
 #
 # CTK Parameters
 #
-
