@@ -17,7 +17,7 @@ Ces modules utilise leur méthodes propres (avec du sql) et font appel a db.py""
 
 from message import Message
 # from channel import Channel
-from user import User
+# from user import User
 from db import Db
 
 
@@ -39,7 +39,7 @@ class Modify:
     def __init__(self):
         self.message = Message()
         # self.channel = Channel()
-        self.user = User()
+        # self.user = User()
         self.db = Db()
 
     def createMessage(self, user_name, channel_name, content):

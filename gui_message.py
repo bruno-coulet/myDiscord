@@ -78,7 +78,7 @@ class ScrollableFrame(ctk.CTkScrollableFrame):
 
 
 
-class Message(ctk.CTk):
+class Gui_Message(ctk.CTk):
 
     def update_messages(self):
         channel = self.current_channel
@@ -274,5 +274,5 @@ class Message(ctk.CTk):
 
 
 if __name__ == "__main__":
-    gui_message = Message()
+    gui_message = Gui_Message()
     gui_message.mainloop()
