@@ -60,11 +60,10 @@ class GuiClient(Client, ctk.CTk):
         Starts the GUI client
         :return: None
         """
-        while True:
-            if self.get_state() is False:
-                self.gui_login()
-            else:
-                self.gui_message()
+        if self.get_state() is False:
+            self.gui_login()
+        else:
+            self.gui_message()
 
 
 if __name__ == "__main__":

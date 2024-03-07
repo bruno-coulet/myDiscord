@@ -38,7 +38,6 @@ class GuiMessages(Client, ctk.CTk):
         self.messages_frame = ctk.CTkFrame(master=self)
         self.messages_frame.configure(fg_color=FG_SECOND_COLOR, border_width=2, border_color=BORDER_COLOR)
         self.messages_frame.grid(row=0, column=1, sticky="nsew")
-        self.
 
         self.barrel_frame = ctk.CTkFrame(master=self)
         self.barrel_frame.grid(row=2, column=1, sticky="nsew")
