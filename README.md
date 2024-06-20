@@ -37,7 +37,7 @@ L'utilisateur peut  :
 - Ajouter un message.
 
 **Problème :**
-Le message est bien ajouter à la base de donnée, mais l'interface graphique ne se reffraichi pas.
+Le message est bien ajouté à la base de donnée, mais l'interface graphique ne se reffraichi pas.
 
 
 
