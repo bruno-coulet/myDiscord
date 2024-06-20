@@ -8,12 +8,12 @@ Projet réalisé par 3 étudiants en 1ère année de Bachelor IT spécialité In
 
 ![Illustration](img/schema.png)
 
-## Mode d'emploi :
-
-<span style="color: red;">ATTENTION :  
+## <span style="color: red;">ATTENTION :  
 Le fichier.env est indispensable pour se connecter.  
 Ce fichier contient les identifiants de connexion à la base de donnée.  
 Il n'est donc pas stocké sur le repo public</span>
+
+## Mode d'emploi :
 
 Lancer le script login.py pour se connecter à un compte.
 L'interface graphique pour la créaction de compte et la connexion à un compte existant s'affiche.
