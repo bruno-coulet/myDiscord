@@ -10,7 +10,7 @@ Projet réalisé par 3 étudiants en 1ère année de Bachelor IT spécialité In
 
 ## Mode d'emploi :
 
-<font : color ='red'>ATTENTION :  
+<font color :'red'>ATTENTION :  
 Le fichier.env est indispensable pour se connecter.  
 Ce fichier contient les identifiants de connexion à la base de donnée.  
 Il n'est donc pas stocké sur le repo public</font>
