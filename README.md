@@ -1,4 +1,5 @@
 # myDiscord - Février 2024
+(Ajout du README fin Juin 2024)
 
 Projet réalisé par 3 étudiants en 1ère année de Bachelor IT spécialité Intelligence Artificielle à La Plateforme_ à Marseille :
 - Cyril Genisson
@@ -8,6 +9,10 @@ Projet réalisé par 3 étudiants en 1ère année de Bachelor IT spécialité In
 ![Illustration](img/schema.png)
 
 ## Mode d'emploi :
+
+<span color : red>ATTENTION : Le fichier.env est indispensable pour se connecter.
+Ce fichier contient les identifiant de connexion à la base de donnée.
+Il n'est donc pas stocké sur le repo public</span>
 
 Lancer le script login.py pour se connecter à un compte.
 L'interface graphique pour la créaction de compte et la connexion à un compte existant s'affiche.
@@ -28,6 +33,10 @@ L'interface graphique de connexion se ferme, puis l'interface du chat s'affiche 
 L'utilisateur peut  :
 - Sélectionner un channel existant, cela affiche les messages du channel sélectionné.
 - Créer un channel.
+- Ajouter un message.
+
+**Problème :**
+Le message est bien ajouter à la base de donnée, mais l'interface graphique ne se reffraichi pas.
 
 
 
