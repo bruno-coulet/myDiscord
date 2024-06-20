@@ -9,18 +9,24 @@ Projet réalisé par 3 étudiants en 1ère année de Bachelor IT spécialité In
 
 ## Mode d'emploi :
 
-Lancer le script login.py pour se connecter à un compte :
+Lancer le script login.py pour se connecter à un compte.
 L'interface graphique pour la créaction de compte et la connexion à un compte existant s'affiche.
 
+![Illustration](img/login.png)
+
 Sélectionner un compte existant, par exemple
-1. login "julie"
-2. mot de passe "b'$2b$12$JNz/cOFhwd.hyzUYvaiE9OiRCqLTEbOYKHecGDkpeUV7Zd7D5G2B.'"
+1. login :
+julie
+2. mot de passe :
+b'$2b$12$JNz/cOFhwd.hyzUYvaiE9OiRCqLTEbOYKHecGDkpeUV7Zd7D5G2B.'
 
-L'interface graphique se ferme, puis l'interface du chat s'affiche à son tour.
+L'interface graphique de connexion se ferme, puis l'interface du chat s'affiche à son tour.
+![Illustration](img/message_1.png)
 
-L'utilisateur peut sélectionner un channel existant, cela affiche les messages du channel sélectionné.
 
-L'utilisateur peut créer un channel.
+L'utilisateur peut  :
+- Sélectionner un channel existant, cela affiche les messages du channel sélectionné.
+- Créer un channel.
 
 
 
