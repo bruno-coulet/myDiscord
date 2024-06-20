@@ -15,12 +15,13 @@ L'interface graphique pour la créaction de compte et la connexion à un compte 
 ![Illustration](img/login.png)
 
 Sélectionner un compte existant, par exemple
-1. login :
+- **login :**  
 julie
-2. mot de passe :
+- **mot de passe :**  
 b'$2b$12$JNz/cOFhwd.hyzUYvaiE9OiRCqLTEbOYKHecGDkpeUV7Zd7D5G2B.'
 
 L'interface graphique de connexion se ferme, puis l'interface du chat s'affiche à son tour.
+
 ![Illustration](img/message_1.png)
 
 
