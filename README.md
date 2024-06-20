@@ -10,8 +10,7 @@ Projet réalisé par 3 étudiants en 1ère année de Bachelor IT spécialité In
 
 ## Mode d'emploi :
 
-<span color : red>ATTENTION : Le fichier.env est indispensable pour se connecter.
-Ce fichier contient les identifiant de connexion à la base de donnée.
+<font : color ='red'>chier contient les identifiant de connexion à la base de donnée.
 Il n'est donc pas stocké sur le repo public</span>
 
 Lancer le script login.py pour se connecter à un compte.
