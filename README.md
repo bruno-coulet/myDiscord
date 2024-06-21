@@ -40,10 +40,6 @@ L'utilisateur peut  :
 Le message est bien ajouté à la base de donnée, mais l'interface graphique ne se reffraichi pas.
 
 
+## Message audio
+Une version alternative permet de gérer les message audio codé en base 64
 
-<!--  
-## Table of content
-- [lingua-franca](#lingua-franca)
-  - [Table of content](#table-of-content)
-  - [Getting started](#getting-started)
- -->
