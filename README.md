@@ -8,11 +8,13 @@ Projet réalisé par 3 étudiants en 1ère année de Bachelor IT spécialité In
 
 ![Illustration](img/schema.png)
 
-## Mode d'emploi :
-
-<span color : red>ATTENTION : Le fichier.env est indispensable pour se connecter.
-Ce fichier contient les identifiant de connexion à la base de donnée.
+## <span style="color: red;">ATTENTION : 
+Le fichier.env est indispensable pour se connecter.
+Ce fichier contient les identifiants de connexion à la base de donnée.
 Il n'est donc pas stocké sur le repo public</span>
+
+
+## Mode d'emploi :
 
 Lancer le script login.py pour se connecter à un compte.
 L'interface graphique pour la créaction de compte et la connexion à un compte existant s'affiche.
@@ -36,13 +38,5 @@ L'utilisateur peut  :
 - Ajouter un message.
 
 **Problème :**
-Le message est bien ajouter à la base de donnée, mais l'interface graphique ne se reffraichi pas.
+Le message est bien ajouté à la base de donnée, mais l'interface graphique ne se reffraichi pas.
 
-
-
-<!--  
-## Table of content
-- [lingua-franca](#lingua-franca)
-  - [Table of content](#table-of-content)
-  - [Getting started](#getting-started)
- -->
