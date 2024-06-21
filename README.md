@@ -6,13 +6,15 @@ Le fichier.env est indispensable pour se connecter.
 Ce fichier contient les identifiants de connexion à la base de donnée.  
 Il n'est donc pas stocké sur le repo public</span>
 
+## Composition de l'équipe
+
 Projet réalisé par 3 étudiants en 1ère année de Bachelor IT spécialité Intelligence Artificielle à La Plateforme_ à Marseille :
 - Cyril Genisson
 - Bruno Coulet
 - Lucas savioz
 
 
-## répartitioon des tâches
+## répartition des tâches
 
 ![Illustration](img/equipe.png)
 
