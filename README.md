@@ -70,8 +70,14 @@ L'utilisateur peut  :
 **Problème :**
 Le message est bien ajouté à la base de donnée, mais l'interface graphique ne se reffraichi pas.
 
-## Message audio
-Une version alternative permet de gérer les message audio encodé en base 64
+## Version 2 - Message audio
+Une version alternative permet de gérer les message audio encodé en base 64.
+Nous n'avons pas eu le temps de fusionner les 2 versions ...
+
+## Versionning - branches
+
+![Illustration](img/branches.png)
+
 
 ## Conclusion
 
