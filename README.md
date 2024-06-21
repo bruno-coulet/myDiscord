@@ -7,13 +7,15 @@ Ce fichier contient les identifiants de connexion à la base de donnée.
 Il n'est donc pas stocké sur le repo public</span>
 
 ## Table des matière
-- [Composition de l'équipe](#Composition de l'équipe)
-- [répartition des tâches](#répartition des tâches)
-- [Structure du projet](#Structure du projet)
-- [Diagramme des classes](#Diagramme des classes)
-- [Base de donnée](#Base de donnée)
-- [Mode d'emploi](#Mode d'emploi)
-- [Conclusion](#Conclusion)
+
+- [Composition de l'équipe](#composition-de-léquipe)
+- [répartition des tâches](#répartition-des-tâches)
+- [Structure du projet](#structure-du-projet)
+- [Diagramme des classes](#diagramme-des-classes)
+- [Base de donnée](#base-de-donnée)
+- [Mode d'emploi](#mode-demploi)
+- [Message audio](#message-audio)
+- [Conclusion](#conclusion)
 
 
 
