@@ -1,19 +1,35 @@
 # myDiscord - Février 2024
 (Ajout du README fin Juin 2024)
 
-Projet réalisé par 3 étudiants en 1ère année de Bachelor IT spécialité Intelligence Artificielle à La Plateforme_ à Marseille :
-- Cyril Genisson
-- Bruno Coulet
-- Lucas savioz
-
-![Illustration](img/schema.png)
-
 ## <span style="color: red;">ATTENTION :  
 Le fichier.env est indispensable pour se connecter.  
 Ce fichier contient les identifiants de connexion à la base de donnée.  
 Il n'est donc pas stocké sur le repo public</span>
 
-## Mode d'emploi :
+Projet réalisé par 3 étudiants en 1ère année de Bachelor IT spécialité Intelligence Artificielle à La Plateforme_ à Marseille :
+- Cyril Genisson
+- Bruno Coulet
+- Lucas savioz
+
+
+## répartitioon des tâches
+
+![Illustration](img/equipe.png)
+
+
+## Structure du projet
+
+![Illustration](img/schema.png)
+
+## Diagramme des classes
+
+![Illustration](img/classes.png)
+
+## Base de donnée
+
+![Illustration](img/tables.png)
+
+## Mode d'emploi:
 
 Lancer le script login.py pour se connecter à un compte.
 L'interface graphique pour la créaction de compte et la connexion à un compte existant s'affiche.
@@ -41,5 +57,5 @@ Le message est bien ajouté à la base de donnée, mais l'interface graphique ne
 
 
 ## Message audio
-Une version alternative permet de gérer les message audio codé en base 64
+Une version alternative permet de gérer les message audio encodé en base 64
 
