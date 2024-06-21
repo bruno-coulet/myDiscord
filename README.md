@@ -8,11 +8,10 @@ Projet réalisé par 3 étudiants en 1ère année de Bachelor IT spécialité In
 
 ![Illustration](img/schema.png)
 
-## <span style="color: red;">ATTENTION : 
-Le fichier.env est indispensable pour se connecter.
-Ce fichier contient les identifiants de connexion à la base de donnée.
+## <span style="color: red;">ATTENTION :  
+Le fichier.env est indispensable pour se connecter.  
+Ce fichier contient les identifiants de connexion à la base de donnée.  
 Il n'est donc pas stocké sur le repo public</span>
-
 
 ## Mode d'emploi :
 
@@ -39,4 +38,8 @@ L'utilisateur peut  :
 
 **Problème :**
 Le message est bien ajouté à la base de donnée, mais l'interface graphique ne se reffraichi pas.
+
+
+## Message audio
+Une version alternative permet de gérer les message audio codé en base 64
 
